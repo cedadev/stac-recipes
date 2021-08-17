@@ -1,0 +1,25 @@
+datasets:
+  - /badc/cmip6/data/
+facets:
+  extraction_methods:
+    - name: regex
+      inputs:
+        regex: '^(?P<var_id>\w*)_(?P<table_id>\w*)_(?P<source_id>.*)_(?P<experiment_id>\w*)_r(?P<realization_index>\d*)i(?P<initialisation_index>\d*)p(?P<physics_index>\d*)f(?P<forcing_index>\d*)_(?P<grid_label>\w*)_(?P<startdate>\d*)-(?P<enddate>\d*)'
+      pre_processors:
+        - name: filename_reducer
+      post_processors:
+        - name: isodate_processor
+          inputs:
+            date_key: start_datetime
+        - name: isodate_processor
+          inputs:
+            date_key: end_datetime
+    - name: regex
+      inputs:
+        regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>\w*)\/(?:[^/]*/){6}(?P<version>\w*)'
+  aggregation_facets:
+    - mip_era
+    - activity_id
+    - institution_id
+    - table_id
+    - source_id

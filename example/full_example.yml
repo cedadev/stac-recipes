@@ -1,0 +1,6 @@
+datasets:
+  - /badc/faam/data
+mappings:
+  facet1:
+    term1: term2
+    term3: term4
