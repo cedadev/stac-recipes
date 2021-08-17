@@ -8,18 +8,9 @@ facets:
     - flight_number
     - datetime
   extraction_methods:
-#    - name: regex
-#      inputs:
-#        regex: '^(?:[^_]*_){2}(?P<datetime>\d*)'
-#      pre_processors:
-#        - name: filename_reducer
-#      post_processors:
-#        - name: isodate_processor
-#          inputs:
-#            date_key: datetime
     - name: regex
+      description: "Extract facets and datetime from filepath"
       inputs:
-#        regex: '^\/(?:[^/]*/)(?P<platform>\w*)\/(?:[^/]*/){2}(?P<flight_number>\w\d{3})'
         regex: '^\/(?:[^/]*/)(?P<platform>\w*)\/(?:[^/]*/){1}(?P<year>\d*)\/(?P<flight_number>\w\d{3})-(?P<month>\w+)-(?P<day>\d{2})'
       post_processors:
         - name: string_join
@@ -33,31 +24,6 @@ facets:
         - name: isodate_processor
           inputs:
             date_key: datetime
-#    - name: iso19115
-#      inputs:
-#        url_template: 'http://api.catalogue.ceda.ac.uk/export/xml/$uuid.xml'
-#        extraction_keys:
-#          - name: north
-#            key: './/gmd:northBoundLatitude/gco:Decimal'
-#          - name: south
-#            key: './/gmd:southBoundLatitude/gco:Decimal'
-#          - name: east
-#            key: './/gmd:eastBoundLongitude/gco:Decimal'
-#          - name: west
-#            key: './/gmd:westBoundLongitude/gco:Decimal'
-#        output_key: 'bbox'
-#      pre_processors:
-#        - name: ceda_observation
-#          inputs:
-#            url_template: 'http://api.catalogue.ceda.ac.uk/api/v0/obs/get_info$filepath'
-#      post_processors:
-#        - name: stac_bbox
-#          inputs:
-#            key_list:
-#              - west
-#              - south
-#              - east
-#              - north
   aggregation_facets:
     - platform
     - flight_number
