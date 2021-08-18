@@ -10,10 +10,9 @@ facets:
       post_processors:
         - name: isodate_processor
           inputs:
-            date_key: start_datetime
-        - name: isodate_processor
-          inputs:
-            date_key: end_datetime
+            date_keys:
+              - start_datetime
+              - end_datetime
     - name: regex
       inputs:
         regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>\w*)\/(?:[^/]*/){6}(?P<version>\w*)'
