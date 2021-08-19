@@ -1,5 +1,7 @@
 datasets:
   - /neodc/sentinel5p/data
+defaults:
+  collection_id: Ic93XnsBhuk7QqVbSFwS
 facets:
   extraction_methods:
     - name: regex
@@ -25,24 +27,6 @@ facets:
        attributes:
          - institution
          - sensor
-         - title
-    - name: header_extract
-      description: Extract BBox from header
-      output_key: bbox
-      inputs:
-       attributes:
-         - geospatial_lat_min
-         - geospatial_lat_max
-         - geospatial_lon_min
-         - geospatial_lon_max
-      post_processors:
-        - name: stac_bbox
-          inputs:
-            key_list:
-              - geospatial_lon_min
-              - geospatial_lat_min
-              - geospatial_lon_max
-              - geospatial_lat_max
   aggregation_facets:
     - platform
     - processing_level
