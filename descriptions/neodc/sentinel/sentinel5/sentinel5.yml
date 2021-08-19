@@ -11,7 +11,7 @@ facets:
     - name: regex
       description: Extract facets from the filename
       inputs:
-        regex: '^(?:[^_]*_){2}(?P<processing_level>[A-Za-z0-9]+)__(?P<variable>[a-zA-Z0-9]+)_{4}(?P<start_datetime>[0-9T]+)_(?P<end_datetime>[0-9T]+)_(?P<orbit>\d+)(?:[^_]*_){3}(?P<datetime>[0-9T]+)'
+        regex: '^(?:[^_]*_){2}(?P<processing_level>[^_]+)__(?P<variable>[^_]+)_{4}(?P<start_datetime>[0-9T]+)_(?P<end_datetime>[0-9T]+)_(?P<orbit>\d+)(?:[^_]*_){3}(?P<datetime>[0-9T]+)'
       pre_processors:
         - name: filename_reducer
       post_processors:
