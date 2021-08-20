@@ -23,7 +23,7 @@ facets:
     - name: xml_extract
       description: Extract facets from the manifest files
       inputs:
-        filter_expr: '\.manifest$',
+        filter_expr: '\.manifest$'
         extraction_keys:
           - name: instrument_type
             key: './/safe:instrument/safe:familyName'
