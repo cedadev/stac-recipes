@@ -24,7 +24,7 @@ facets:
         - name: isodate_processor
           inputs:
             date_keys:
-              - datetime
+              - key: datetime
   aggregation_facets:
     - platform
     - flight_number

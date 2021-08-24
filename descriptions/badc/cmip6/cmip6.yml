@@ -13,11 +13,13 @@ facets:
         - name: isodate_processor
           inputs:
             date_keys:
-              - start_datetime
-              - end_datetime
+              - key: start_datetime
+                format: '%Y%m'
+              - key: end_datetime
+                format: '%Y%m'
     - name: regex
       inputs:
-        regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>\w*)\/(?:[^/]*/){6}v(?P<version>\w*)'
+        regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/){6}(?P<version>\w*)'
   aggregation_facets:
     - mip_era
     - activity_id
