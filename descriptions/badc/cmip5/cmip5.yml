@@ -1,7 +1,7 @@
 datasets:
   - /badc/cmip5/data/cmip5/
-defaults:
-  collection_id: Ca1oVHsBhuk7QqVbE5ej
+collection:
+  id: Ca1oVHsBhuk7QqVbE5ej
 facets:
   extraction_methods:
     - name: regex
