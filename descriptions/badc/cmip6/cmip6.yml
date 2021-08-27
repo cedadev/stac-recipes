@@ -2,6 +2,7 @@ datasets:
   - /badc/cmip6/data/
 defaults:
   license: CC-BY-SA-4.0
+  collection_id: Fj3reHsBhuk7QqVbt7P-
 facets:
   extraction_methods:
     - name: regex
@@ -13,10 +14,9 @@ facets:
         - name: isodate_processor
           inputs:
             date_keys:
-              - key: start_datetime
-                format: '%Y%m'
-              - key: end_datetime
-                format: '%Y%m'
+              - start_datetime
+              - end_datetime
+            format: '%Y%m'
     - name: regex
       inputs:
         regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/){6}(?P<version>\w*)'
