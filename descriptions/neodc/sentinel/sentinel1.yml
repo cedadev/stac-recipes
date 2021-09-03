@@ -32,7 +32,7 @@ facets:
             ns0: "http://www.w3.org/2001/XMLSchema-instance"
             gml: "http://www.opengis.net/gml"
             xfdu: "urn:ccsds:schema:xfdu:1"
-            safe': "http://www.esa.int/safe/sentinel-1.0"
+            safe: "http://www.esa.int/safe/sentinel-1.0"
             s1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1"
             s1sar: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar"
             s1sarl1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-1"
