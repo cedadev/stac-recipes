@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/Mahir-Sparkess/item_validator.git
-    rev: v1.1
+    rev: master
     hooks:
       - id: item-desc-validator
         args: [--filepath=descriptions/]

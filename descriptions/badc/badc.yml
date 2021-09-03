@@ -1,7 +1,0 @@
-datasets:
-  - /badc
-categories:
-  - label: metadata
-    regex: 00README
-  - label: hidden
-    regex: \/\.
