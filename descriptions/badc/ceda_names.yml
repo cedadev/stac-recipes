@@ -1,0 +1,27 @@
+datasets:
+  - /badc/bortas/data
+  - /badc/caesar/data 
+  - /badc/cap/data  
+  - /badc/cast/data 
+collection:
+  id: xxxxxxxxxxx
+facets:
+  extraction_methods:
+    - name: regex
+      inputs:
+        regex: '^(?P<instrument>[^_]*)_(?P<platfrom>[^_]*)_(?P<startdate>\d{8})(?P<starttime>\d*)(_(?P<extra>))?\.
+      pre_processors:
+        - name: filename_reducer
+      post_processors:
+        - name: isodate_processor
+          inputs:
+            format: '%Y%m%d'
+            date_keys:
+              - startdate
+
+  aggregation_facets:
+    - instrument
+    - platfrom
+    - extra
+
+

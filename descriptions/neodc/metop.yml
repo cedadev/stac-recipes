@@ -1,0 +1,37 @@
+datasets:
+  - /neodc/avhrr3_metop_a
+  - /neodc/avhrr3_metop_c 
+  - /neodc/gome2_metop_b  
+  - /neodc/iasi_metop_a  
+  - /neodc/iasi_metop_c
+  - /neodc/avhrr3_metop_b
+  - /neodc/gome2_metop_a 
+  - /neodc/gome2_metop_c
+  - /neodc/iasi_metop_b
+collection:
+  id: xxxxxxxxxxx
+facets:
+  extraction_methods:
+    - name: regex
+      inputs:
+        regex: '^(?P<inst_id>[^_]{4})_(?P<product_type>[^_]{3})_(?P<level>[^_]{2})_(?P<spacecraft_id>[^_]{3})_(?P<sense_starttime>\d{14})Z_(?P<sense_endtime>\d{14})Z_(?P<process_mode>[^_])_(?P<disposition_mode>[^_])_(?P<processing_time>\d{14})Z'
+      pre_processors:
+        - name: filename_reducer
+      post_processors:
+        - name: isodate_processor
+          inputs:
+            format: '%Y%m%d%H%M%S'
+            date_keys:
+              - sense_starttime
+              - sense_endtime
+              - processing_time
+
+  aggregation_facets:
+    - inst_id
+    - product_type
+    - level
+    - spacecraft_id
+    - process_mode
+    - disposition_mode
+    - sense_starttime
+

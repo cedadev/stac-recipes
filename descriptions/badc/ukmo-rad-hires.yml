@@ -1,0 +1,28 @@
+datasets:
+  - /badc/ukmo-rad-hires/data
+collection:
+  id: xxxxxxxxxxx
+facets:
+  extraction_methods:
+    - name: regex
+      description: "Extract "
+      inputs:
+        # /badc/ukmo-rad-hires/data/aberporth/2003/03/metoffice-radiosonde_aberporth_2003031105.edt
+        regex: data/(?P<station>\w*)/(?P<year>\d*)/(?P<month>\d*)/[\w\-]+_(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})(?P<hour>\d{2}).edt$
+      post_processors:
+        - name: string_join
+          inputs:
+            key_list:
+              - year
+              - month
+              - day
+            delimiter: '-'
+            output_key: datetime
+        - name: isodate_processor
+          inputs:
+            date_keys:
+              - datetime
+  aggregation_facets:
+    - station
+    - year
+
