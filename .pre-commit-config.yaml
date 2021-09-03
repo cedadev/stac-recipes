@@ -1,0 +1,5 @@
+repos:
+  - repo: https://github.com/Mahir-Sparkess/item_validator.git
+    rev: v1.0.5
+    hooks:
+      - id: item-desc-validator
