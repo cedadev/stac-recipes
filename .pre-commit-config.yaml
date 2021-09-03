@@ -3,3 +3,4 @@ repos:
     rev: v1.0.5
     hooks:
       - id: item-desc-validator
+        args: [--filepath=descriptions/]
