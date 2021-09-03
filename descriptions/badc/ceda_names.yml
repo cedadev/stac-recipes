@@ -9,7 +9,7 @@ facets:
   extraction_methods:
     - name: regex
       inputs:
-        regex: '^(?P<instrument>[^_]*)_(?P<platfrom>[^_]*)_(?P<startdate>\d{8})(?P<starttime>\d*)(_(?P<extra>))?\.
+        regex: ^(?P<instrument>[^_]*)_(?P<platfrom>[^_]*)_(?P<startdate>\d{8})(?P<starttime>\d*)(_(?P<extra>))?\.
       pre_processors:
         - name: filename_reducer
       post_processors:
