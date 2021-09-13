@@ -1,15 +1,14 @@
 datasets:
-  - neodc/modis/data
+  - /neodc/modis/data
 collection:
   id: xxxxxxxxxxx
 facets:
   extraction_methods:
     - name: regex
-      description: "Extract "
+      description: "Extract hdf files"
       inputs:
         # /neodc/modis/data/MOD03/collection61/2021/09/03/MOD03.A2021246.0725.061.2021246131852.hdf
-        regex: data/(?P<product>\w*)/collection(?P<collection>\d*)/(?P<year>\d*)/(?P<month>\d*)/(?P<day>\d{2})/[\w\.]+.A2021246.0725.061.(?P<time_processed>\d*).hdf$
-        regex: data/(?P<station>\w*)/(?P<year>\d*)/(?P<month>\d*)/[\w\-]+_(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})(?P<hour>\d{2}).edt$
+        regex: data/(?P<product>\w*)/collection(?P<collection>\d*)/(?P<year>\d*)/(?P<month>\d*)/(?P<day>\d{2})/[\w+\.]+(?P<time_processed>\d*).hdf$
       post_processors:
         - name: string_join
           inputs:
