@@ -17,13 +17,20 @@ facets:
             date_keys:
               - start_datetime
               - end_datetime
-            format: '%Y%m'
     - name: regex
       inputs:
-        regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/){6}v(?P<version>\w*)'
+        regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/)'
+    - name: regex
+      inputs:
+        regex: '^\/(?:[^/]*/){12}v(?P<version>\w*)'
   aggregation_facets:
     - mip_era
     - activity_id
     - institution_id
     - table_id
     - source_id
+    - var_id
+    - version
+categories:
+  - label: hidden
+    regex: files
