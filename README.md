@@ -1,3 +1,5 @@
+[![YAML Validator](https://github.com/cedadev/item-descriptions/actions/workflows/tests.yaml/badge.svg)](https://github.com/cedadev/item-descriptions/actions/workflows/tests.yaml)
+
 # Item Descriptions
 
 These documents are to describe how to process the files within a dataset and extract facets.
