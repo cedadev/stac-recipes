@@ -1,6 +1,16 @@
 datasets:
   - /badc/faam/data
+defaults:
+  source_classsifier: aircraft
 mappings:
   facet1:
     term1: term2
     term3: term4
+overrides:
+  facet2: term1
+facets:
+  extraction_methods:
+    name: regex
+    inputs:
+      regex: (?P<project>\w*)
+
