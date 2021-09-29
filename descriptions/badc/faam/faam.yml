@@ -2,6 +2,9 @@ datasets:
   - /badc/faam/data
 collection:
   id: WH5qEHoBZp5aDdjsfMv-
+defaults:
+  properties:
+    source_classifier: aircraft
 facets:
   allowed_facets:
     - project

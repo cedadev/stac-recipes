@@ -1,5 +1,8 @@
 datasets:
   - /badc
+defaults:
+  properties:
+    source_classifier: undefined
 categories:
   - label: metadata
     regex: 00README

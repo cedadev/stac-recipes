@@ -2,6 +2,9 @@ datasets:
   - /neodc/sentinel1a/data
 collection:
   id: wiLHc3sBhuk7QqVbjTmQ
+defaults:
+  properties:
+    source_classifier: satellites
 facets:
   extraction_methods:
     - name: regex

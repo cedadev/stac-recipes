@@ -10,6 +10,9 @@ datasets:
   - /neodc/iasi_metop_b
 collection:
   id: xxxxxxxxxxx
+defaults:
+  properties:
+    source_classifier: satellites
 facets:
   extraction_methods:
     - name: regex

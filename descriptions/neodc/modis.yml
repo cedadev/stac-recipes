@@ -2,6 +2,9 @@ datasets:
   - /neodc/modis/data
 collection:
   id: zwE8GHwBstFSrDJeqxf4
+defaults:
+  properties:
+    source_classifier: satellites
 facets:
   extraction_methods:
     - name: regex
