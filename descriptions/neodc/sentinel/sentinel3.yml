@@ -1,6 +1,6 @@
 datasets:
-  - /neodc/sentinel1a/data
-  - /neodc/sentinel1b/data
+  - /neodc/sentinel3a/data
+  - /neodc/sentinel3b/data
 collection:
   id: wiLHc3sBhuk7QqVbjTmQ
 defaults:
