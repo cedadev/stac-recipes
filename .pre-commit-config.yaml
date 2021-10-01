@@ -1,0 +1,6 @@
+repos:
+  - repo: https://github.com/cedadev/item_description_validator.git
+    rev: master
+    hooks:
+      - id: item-desc-validator
+        args: [descriptions/]
