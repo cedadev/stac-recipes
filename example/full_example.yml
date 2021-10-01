@@ -1,16 +1,26 @@
-datasets:
+paths:
   - /badc/faam/data
-defaults:
-  source_classsifier: aircraft
-mappings:
-  facet1:
-    term1: term2
-    term3: term4
-overrides:
-  facet2: term1
-facets:
+collections:
+  defaults:
+  mappings:
+  overrides:
   extraction_methods:
     name: regex
+    path: /badc/faam/data
+    inputs:
+      regex: '\/badc\/(?P<collection_id>)'
+facets:
+  defaults:
+    source_classsifier: aircraft
+  mappings:
+    facet1:
+      term1: term2
+      term3: term4
+  overrides:
+    facet2: term1
+  extraction_methods:
+    name: regex
+    path: /badc/faam/data
     inputs:
       regex: (?P<project>\w*)
 
