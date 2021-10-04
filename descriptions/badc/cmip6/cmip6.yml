@@ -10,7 +10,12 @@ facets:
   extraction_methods:
     - name: regex
       inputs:
-        regex: '^(?P<var_id>[^_]+)_(?P<table_id>[^_]+)_(?P<source_id>[^_]+)_(?P<experiment_id>[^_]+)_r(?P<realization_index>\d*)i(?P<initialisation_index>\d*)p(?P<physics_index>\d*)f(?P<forcing_index>\d*)_(?P<grid_label>[^_]+)_(?P<start_datetime>\d*)-(?P<end_datetime>\d*)'
+        regex: '^(?P<var_id>[^_]+)_(?P<table_id>[^_]+)_(?P<source_id>[^_]+)_(?P<experiment_id>[^_]+)_r(?P<realization_index>\d*)i(?P<initialisation_index>\d*)p(?P<physics_index>\d*)f(?P<forcing_index>\d*)_(?P<grid_label>[^_.]+)'
+      pre_processors:
+        - name: filename_reducer
+    - name: regex
+      inputs:
+        regex: '_(?P<start_datetime>\d*)-(?P<end_datetime>\d*)\.'
       pre_processors:
         - name: filename_reducer
       post_processors:
