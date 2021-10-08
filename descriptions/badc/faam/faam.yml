@@ -4,7 +4,7 @@ collection:
   id: WH5qEHoBZp5aDdjsfMv-
 defaults:
   properties:
-    source_classifier: aircraft
+    general_data_type: aircraft
 facets:
   allowed_facets:
     - project
