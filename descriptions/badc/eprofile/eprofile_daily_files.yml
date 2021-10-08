@@ -2,6 +2,10 @@ datasets:
   - /badc/eprofile/data/daily_files
 collection:
   id: eprof_daily_test
+defaults:
+  properties:
+    general_data_type: remote sensing instruments
+    instrument_type: ceilometers
 facets:
   extraction_methods:
     - name: regex
