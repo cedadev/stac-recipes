@@ -5,7 +5,7 @@ collection:
   id: Fj3reHsBhuk7QqVbt7P-
 defaults:
   properties:
-    source_classifier: climate models
+    general_data_type: climate models
 facets:
   extraction_methods:
     - name: regex
