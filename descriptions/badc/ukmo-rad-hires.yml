@@ -2,6 +2,13 @@ datasets:
   - /badc/ukmo-rad-hires/data
 collection:
   id: xxxxxxxxxxx
+defaults:
+  properties:
+    general_data_type: other mobile platforms
+    instrument_type: radiosonde
+    permitted_use:
+      - academic
+      - eductational
 facets:
   extraction_methods:
     - name: regex

@@ -5,6 +5,12 @@ collection:
 defaults:
   properties:
     general_data_type: aircraft
+    permitted_use:
+      - academic
+      - educational
+      - commercial
+      - policy
+      - personal
 facets:
   allowed_facets:
     - project

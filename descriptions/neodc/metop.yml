@@ -12,7 +12,9 @@ collection:
   id: xxxxxxxxxxx
 defaults:
   properties:
-    source_classifier: satellites
+    general_data_type: satellites
+    permitted_use:
+      - academic
 facets:
   extraction_methods:
     - name: regex

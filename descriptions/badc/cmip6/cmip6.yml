@@ -6,6 +6,12 @@ collection:
 defaults:
   properties:
     general_data_type: climate models
+    permitted_use:
+      - academic
+      - educational
+      - commercial
+      - policy
+      - personal
 facets:
   extraction_methods:
     - name: regex
