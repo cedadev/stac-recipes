@@ -5,7 +5,13 @@ collection:
   id: Fj3reHsBhuk7QqVbt7P-
 defaults:
   properties:
-    source_classifier: climate models
+    general_data_type: climate models
+    permitted_use:
+      - academic
+      - educational
+      - commercial
+      - policy
+      - personal
 facets:
   extraction_methods:
     - name: regex
