@@ -2,9 +2,21 @@ datasets:
   - /badc/bortas/data
   - /badc/caesar/data 
   - /badc/cap/data  
-  - /badc/cast/data 
+  - /badc/cast/data
+  - /badc/csip/data
+  - /badc/cops/data
 collection:
   id: xxxxxxxxxxx
+defaults:
+  properties:
+    general_data_type: remote sensing instruments
+    instrument_type: ceilometers
+    permitted_use:
+      - academic
+      - educational
+      - commercial
+      - policy
+      - personal
 facets:
   extraction_methods:
     - name: regex
@@ -18,10 +30,15 @@ facets:
             format: '%Y%m%d'
             date_keys:
               - startdate
-
+    - name: regex
+      description: "Extract"
+      inputs:
+        # /badc/ukmo-rad-hires/data/aberporth/2003/03/metoffice-radiosonde_aberporth_2003031105.edt
+        regex: /badc/(?P<project>\w*)
   aggregation_facets:
     - instrument
     - platfrom
     - extra
+    - project
 
 
