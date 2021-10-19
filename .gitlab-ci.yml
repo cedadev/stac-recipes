@@ -28,7 +28,3 @@ build:item_generator:
     REPOSITORY: $IMAGE_REPO_BASE/item-descriptions
   only:
     - master
-
-
-
-IMAGE_REPO_BASE: registry.ceda.ac.uk/stac-indexer
