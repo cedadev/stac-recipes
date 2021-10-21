@@ -6,7 +6,8 @@ defaults:
     inspire_theme: Meteorological geographical features
     gemet_topic:
       - Climatology, meteorology, atmosphere
-    permitted_use: undefined
+    permitted_use:
+      - undefined
 categories:
   - label: metadata
     regex: 00README
