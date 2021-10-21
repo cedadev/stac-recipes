@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - deploy
 
 include:
     - project: cedaci/ci-tools
@@ -26,5 +27,14 @@ build:item_generator:
   stage: build
   variables:
     REPOSITORY: $IMAGE_REPO_BASE/item-descriptions
+  only:
+    - master
+
+
+trigger:deploy:
+  stage: deploy
+  image: registry.ceda.ac.uk/ci-tools/utils:latest
+  script:
+     - curl -X POST -F token=$STAC_INDEXER_TRIGGER_TOKEN -F ref=master -F "variables[ITEM_DESCRIPTIONS_TAG]=$CI_COMMIT_SHORT_SHA" https://breezy.badc.rl.ac.uk/api/v4/projects/560/trigger/pipeline
   only:
     - master
