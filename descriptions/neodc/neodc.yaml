@@ -2,7 +2,10 @@ datasets:
   - /neodc
 defaults:
   properties:
-    source_classifier: undefined
+    general_data_type: undefined
+    inspire_theme: orthoimagery
+    gemet_topic:
+      - environment
 categories:
   - label: metadata
     regex: 00README

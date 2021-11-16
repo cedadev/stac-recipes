@@ -5,7 +5,13 @@ collection:
   id: wiLHc3sBhuk7QqVbjTmQ
 defaults:
   properties:
-    source_classifier: satellites
+    general_data_type: satellites
+    permitted_use:
+      - academic
+      - educational
+      - commercial
+      - policy
+      - personal
 facets:
   extraction_methods:
     - name: regex
