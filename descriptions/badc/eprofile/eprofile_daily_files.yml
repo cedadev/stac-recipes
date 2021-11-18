@@ -36,5 +36,7 @@ facets:
     - wigos_id
     - instrument_letter
     - operator
+  search_facets:
+    - instrument_type
 
 

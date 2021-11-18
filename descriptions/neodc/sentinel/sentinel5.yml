@@ -42,3 +42,5 @@ facets:
     - variable
     - product_version
     - datetime
+  search_facets:
+    - permitted_use
