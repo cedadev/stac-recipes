@@ -1,8 +1,15 @@
-datasets:
+paths:
   - /badc
-defaults:
-  properties:
-    source_classifier: undefined
+collections:
+  id:
+    extraction_methods:
+      name: regex
+      inputs:
+        regex: '\/badc\/(?P<collection_id>)'
+facets:
+  defaults:
+    properties:
+      source_classifier: undefined
 categories:
   - label: metadata
     regex: 00README

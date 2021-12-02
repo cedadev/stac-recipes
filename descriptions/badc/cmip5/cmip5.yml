@@ -1,11 +1,9 @@
-datasets:
+paths:
   - /badc/cmip5/data/cmip5/
-collection:
-  id: Ca1oVHsBhuk7QqVbE5ej
-defaults:
-  properties:
-    source_classifier: climate models
 facets:
+  defaults:
+    properties:
+      source_classifier: climate models
   extraction_methods:
     - name: regex
       description: "Extract "
