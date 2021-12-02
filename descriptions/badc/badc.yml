@@ -11,6 +11,8 @@ defaults:
 facets:
   search_facets:
     - general_data_type
+    - inspire_theme
+    - gemet_topic
     - permitted_use
 categories:
   - label: metadata

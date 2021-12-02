@@ -54,5 +54,3 @@ facets:
     - product_type
     - product_version
     - start_datetime
-  search_facets:
-    - permitted_use
