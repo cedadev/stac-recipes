@@ -11,3 +11,9 @@ categories:
     regex: 00README
   - label: hidden
     regex: \/\.
+facets:
+  search_facets:
+    - general_data_type
+    - inspire_theme
+    - gemet_topic
+    - permitted_use
