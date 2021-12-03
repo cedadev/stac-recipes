@@ -1,4 +1,4 @@
-datasets:
+paths:
   - /neodc/avhrr3_metop_a
   - /neodc/avhrr3_metop_c 
   - /neodc/gome2_metop_b  
@@ -8,12 +8,14 @@ datasets:
   - /neodc/gome2_metop_a 
   - /neodc/gome2_metop_c
   - /neodc/iasi_metop_b
-collection:
+collections:
   id: xxxxxxxxxxx
-defaults:
-  properties:
-    source_classifier: satellites
 facets:
+  defaults:
+    properties:
+      general_data_type: satellites
+      permitted_use:
+        - academic
   extraction_methods:
     - name: regex
       inputs:

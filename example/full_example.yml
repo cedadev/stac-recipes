@@ -1,19 +1,18 @@
 paths:
   - /badc/faam/data
+categories:
+  - label: metadata
+    regex: 00README
 collections:
-  id:
-    defaults: {}
-    extraction_methods:
-      name: regex
-      inputs:
-        regex: '\/badc\/(?P<collection_id>)'
+  id: undefined
   defaults: {}
   mappings: {}
   overrides: {}
   extraction_methods:
 facets:
   defaults:
-    source_classsifier: aircraft
+    properties:
+      source_classifier: aircraft
   mappings:
     facet1:
       term1: term2
@@ -26,7 +25,11 @@ facets:
       regex: (?P<project>\w*)
   aggregation_facets:
     - project
-  categories:
-    - label: metadata
-      regex: 00README
+  search_facets:
+    - source_classifier
+assets:
+    defaults: {}
+    mappings: {}
+    overrides: {}
+    extraction_methods: []
 

@@ -1,11 +1,17 @@
-datasets:
+paths:
   - /neodc/sentinel5p/data
-collection:
-  id: Ic93XnsBhuk7QqVbSFwS
-defaults:
-  properties:
-    source_classifier: satellites
+collections:
+  id: sentinel5p
 facets:
+  defaults:
+    properties:
+      general_data_type: satellites
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
   extraction_methods:
     - name: regex
       description: Extract facets from the file path

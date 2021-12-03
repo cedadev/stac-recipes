@@ -1,11 +1,17 @@
-datasets:
+paths:
   - /neodc/sentinel1a/data
-collection:
-  id: wiLHc3sBhuk7QqVbjTmQ
-defaults:
-  properties:
-    source_classifier: satellites
+collections:
+  id: sentinel1a
 facets:
+  defaults:
+    properties:
+      general_data_type: satellites
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
   extraction_methods:
     - name: regex
       description: Extract facets from the file path
@@ -32,15 +38,15 @@ facets:
             key: './/safe:instrument/safe:familyName'
             attribute: abbreviation
         namespaces:
-            ns0: "http://www.w3.org/2001/XMLSchema-instance"
-            gml: "http://www.opengis.net/gml"
-            xfdu: "urn:ccsds:schema:xfdu:1"
-            safe: "http://www.esa.int/safe/sentinel-1.0"
-            s1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1"
-            s1sar: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar"
-            s1sarl1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-1"
-            s1sarl2: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-2"
-            gx: "http://www.google.com/kml/ext/2.2"
+          ns0: "http://www.w3.org/2001/XMLSchema-instance"
+          gml: "http://www.opengis.net/gml"
+          xfdu: "urn:ccsds:schema:xfdu:1"
+          safe: "http://www.esa.int/safe/sentinel-1.0"
+          s1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1"
+          s1sar: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar"
+          s1sarl1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-1"
+          s1sarl2: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-2"
+          gx: "http://www.google.com/kml/ext/2.2"
   aggregation_facets:
     - platform
     - instrument_mode

@@ -1,0 +1,42 @@
+paths:
+  - /badc/eprofile/data/daily_files
+collections:
+  id: eprof_daily_test
+facets:
+  defaults:
+    properties:
+      general_data_type: remote sensing instruments
+      instrument_type: ceilometers
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
+  extraction_methods:
+    - name: regex
+      inputs:
+        regex: L2_(?P<wigos_id>[a-zA-Z0-9\-]*)_(?P<instrument_letter>\w{1})(?P<startdate>\d{8})(\d{4})\.nc
+      post_processors:
+        - name: isodate_processor
+          inputs:
+            format: '%Y%m%d'
+            date_keys:
+              - startdate
+    - name: regex
+      description: "Extract"
+      inputs:
+        # /badc/ukmo-rad-hires/data/aberporth/2003/03/metoffice-radiosonde_aberporth_2003031105.edt
+        regex: (?P<country>\w*)/(?P<location>\w*)/(?P<operator>\w*)-(?P<instrument_type>\w*)_(?P<instrument_id>\w*)/
+  aggregation_facets:
+    - country
+    - location
+    - operator
+    - instrument_type
+    - wigos_id
+    - instrument_letter
+    - operator
+  search_facets:
+    - instrument_type
+
+

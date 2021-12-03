@@ -1,8 +1,15 @@
-datasets:
+paths:
   - /badc/ukmo-rad-hires/data
-collection:
-  id: xxxxxxxxxxx
+collections:
+  id: ukmo-rad-hires
 facets:
+  defaults:
+    properties:
+      general_data_type: other mobile platforms
+      instrument_type: radiosonde
+      permitted_use:
+        - academic
+        - eductational
   extraction_methods:
     - name: regex
       description: "Extract "

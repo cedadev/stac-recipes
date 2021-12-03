@@ -3,7 +3,7 @@ datasets:
   - /badc/caesar/data 
   - /badc/cap/data  
   - /badc/cast/data 
-collection:
+collections:
   id: xxxxxxxxxxx
 facets:
   extraction_methods:

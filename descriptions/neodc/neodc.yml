@@ -1,0 +1,19 @@
+paths:
+  - /neodc
+categories:
+  - label: metadata
+    regex: 00README
+  - label: hidden
+    regex: \/\.
+facets:
+  defaults:
+    properties:
+      general_data_type: undefined
+      inspire_theme: orthoimagery
+      gemet_topic:
+        - environment
+  search_facets:
+    - general_data_type
+    - inspire_theme
+    - gemet_topic
+    - permitted_use
