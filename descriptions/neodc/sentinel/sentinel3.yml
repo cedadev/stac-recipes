@@ -1,27 +1,21 @@
 datasets:
-  - /neodc/sentinel1a/data
-  - /neodc/sentinel1b/data
+  - /neodc/sentinel3a/data
+  - /neodc/sentinel3b/data
 collection:
-  id: wiLHc3sBhuk7QqVbjTmQ
+  id: change_this_as_copied_from_sentinel1
 defaults:
   properties:
-    general_data_type: satellites
-    permitted_use:
-      - academic
-      - educational
-      - commercial
-      - policy
-      - personal
+    source_classifier: satellites
 facets:
   extraction_methods:
     - name: regex
       description: Extract facets from the file path
       inputs:
-        regex: '^\/(?:[^/]*/)(?P<platform>\w*)(?:[^/]*/){2}(?P<instrument_mode>\w+)/(?P<processing_level>[A-Z0-9]+)_(?P<product_type>[\w]+)/(?P<processing_software>[A-Z]+)_(?P<product_version>\w+)'
+        regex: '^\/(?:[^/]*/)(?P<platform>\w*)(?:[^/]*/){2}(?P<instrument_name>\w+)/(?P<processing_level>[A-Z0-9]+)_(?P<product_type>[\w]+)'
     - name: regex
       description: Extract facets from the filename
       inputs:
-        regex: '^(?:[^_]*_){5}(?P<start_datetime>[0-9T]+)_(?P<end_datetime>[0-9T]+)_(?P<orbit>\d+)'
+        regex: '^(?:[^_]*_){8}(?P<start_datetime>[0-9T]+)_(?P<end_datetime>[0-9T]+)_([0-9]{4})_(?P<orbit>\d+)'
       pre_processors:
         - name: filename_reducer
       post_processors:
@@ -39,19 +33,22 @@ facets:
             key: './/safe:instrument/safe:familyName'
             attribute: abbreviation
         namespaces:
-            ns0: "http://www.w3.org/2001/XMLSchema-instance"
-            gml: "http://www.opengis.net/gml"
             xfdu: "urn:ccsds:schema:xfdu:1"
-            safe: "http://www.esa.int/safe/sentinel-1.0"
+            safe: "http://www.esa.int/safe/sentinel/1.1"
             s1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1"
+            gml: "http://www.opengis.net/gml"
             s1sar: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar"
             s1sarl1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-1"
             s1sarl2: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-2"
             gx: "http://www.google.com/kml/ext/2.2"
+            m: "http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+            d: "http://schemas.microsoft.com/ado/2007/08/dataservices"
+            atom: "http://www.w3.org/2005/Atom"
+            opensearch: "http://a9.com/-/spec/opensearch/1.1/"
+
   aggregation_facets:
     - platform
-    - instrument_mode
+    - instrument_name
     - processing_level
     - product_type
-    - product_version
     - start_datetime
