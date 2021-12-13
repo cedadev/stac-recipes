@@ -6,13 +6,13 @@ facets:
   defaults:
     properties:
       source_classifier: climate models
-        general_data_type: climate models
-        permitted_use:
-          - academic
-          - educational
-          - commercial
-          - policy
-          - personal
+      general_data_type: climate models
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
   extraction_methods:
     - name: regex
       description: "Extract "
