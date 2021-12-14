@@ -1,11 +1,5 @@
 paths:
   - /badc
-collections:
-  id:
-    extraction_methods:
-      name: regex
-      inputs:
-        regex: '\/badc\/(?P<collection_id>)'
 facets:
   defaults:
     properties:
