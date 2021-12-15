@@ -1,17 +1,18 @@
-datasets:
+paths:
   - /badc/cmip5/data/cmip5/
-collection:
+collections:
   id: Ca1oVHsBhuk7QqVbE5ej
-defaults:
-  properties:
-    general_data_type: climate models
-    permitted_use:
-      - academic
-      - educational
-      - commercial
-      - policy
-      - personal
 facets:
+  defaults:
+    properties:
+      source_classifier: climate models
+      general_data_type: climate models
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
   extraction_methods:
     - name: regex
       description: "Extract "

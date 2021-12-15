@@ -1,14 +1,15 @@
-datasets:
+paths:
   - /badc
-defaults:
-  properties:
-    general_data_type: undefined
-    inspire_theme: Meteorological geographical features
-    gemet_topic:
-      - Climatology, meteorology, atmosphere
-    permitted_use:
-      - undefined
 facets:
+  defaults:
+    properties:
+      source_classifier: undefined
+      general_data_type: undefined
+      inspire_theme: Meteorological geographical features
+      gemet_topic:
+        - Climatology, meteorology, atmosphere
+      permitted_use:
+        - undefined
   search_facets:
     - general_data_type
     - inspire_theme

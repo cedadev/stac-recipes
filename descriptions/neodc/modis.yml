@@ -1,17 +1,17 @@
-datasets:
+paths:
   - /neodc/modis/data
-collection:
-  id: zwE8GHwBstFSrDJeqxf4
-defaults:
-  properties:
-    general_data_type: satellites
-    permitted_use:
-      - academic
-      - educational
-      - commercial
-      - policy
-      - personal
+collections:
+  id: modis
 facets:
+  defaults:
+    properties:
+      general_data_type: satellites
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
   extraction_methods:
     - name: regex
       description: "Extract hdf files"

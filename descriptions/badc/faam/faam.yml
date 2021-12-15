@@ -1,21 +1,17 @@
-datasets:
+paths:
   - /badc/faam/data
-collection:
-  id: WH5qEHoBZp5aDdjsfMv-
-defaults:
-  properties:
-    general_data_type: aircraft
-    permitted_use:
-      - academic
-      - educational
-      - commercial
-      - policy
-      - personal
+collections:
+  id: faam
 facets:
-  allowed_facets:
-    - project
-    - flight_number
-    - datetime
+  defaults:
+    properties:
+      general_data_type: aircraft
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
   extraction_methods:
     - name: regex
       description: "Extract facets and datetime from filepath"

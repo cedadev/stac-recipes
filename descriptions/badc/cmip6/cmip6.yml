@@ -1,18 +1,22 @@
-datasets:
+paths:
   - /badc/cmip6/data/
-collection:
-  license: CC-BY-SA-4.0
-  id: Fj3reHsBhuk7QqVbt7P-
-defaults:
-  properties:
-    general_data_type: climate models
-    permitted_use:
-      - academic
-      - educational
-      - commercial
-      - policy
-      - personal
+categories:
+  - label: hidden
+    regex: files
+collections:
+  id: cmip6
+  defaults:
+    license: CC-BY-SA-4.0
 facets:
+  defaults:
+    properties:
+      general_data_type: climate models
+      permitted_use:
+        - academic
+        - educational
+        - commercial
+        - policy
+        - personal
   extraction_methods:
     - name: regex
       inputs:
@@ -45,6 +49,3 @@ facets:
     - source_id
     - var_id
     - version
-categories:
-  - label: hidden
-    regex: files
