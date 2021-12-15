@@ -1,4 +1,4 @@
-datasets:
+paths:
   - /badc/bortas/data
   - /badc/caesar/data 
   - /badc/cap/data  
