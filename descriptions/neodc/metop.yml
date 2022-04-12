@@ -31,7 +31,7 @@ facets:
               - sense_endtime
               - processing_time
 
-  aggregation_facets:
+  common_facets:
     - inst_id
     - product_type
     - level

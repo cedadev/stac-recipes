@@ -19,7 +19,7 @@ facets:
             date_keys:
               - startdate
 
-  aggregation_facets:
+  common_facets:
     - instrument
     - platfrom
     - extra

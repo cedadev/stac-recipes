@@ -30,6 +30,6 @@ facets:
           inputs:
             date_keys:
               - datetime
-  aggregation_facets:
+  common_facets:
     - platform
     - flight_number

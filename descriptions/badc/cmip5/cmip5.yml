@@ -18,7 +18,7 @@ facets:
       description: "Extract "
       inputs:
         regex: '^\/(?:[^/]*/){3}(?P<project>\w*)\/(?P<product>\w*)\/(?P<institute>\w*)\/(?P<model>\w*)\/(?P<experiment>\w*)\/(?P<time_frequency>\w*)\/(?P<realm>\w*)\/(?P<cmip_table>\w*)\/(?P<ensemble>\w*)\/(?P<version>\w*)\/(?P<variable>\w*)'
-  aggregation_facets:
+  common_facets:
     - project
     - product
     - institute

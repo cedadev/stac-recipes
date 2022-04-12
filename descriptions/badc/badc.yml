@@ -10,7 +10,7 @@ facets:
         - Climatology, meteorology, atmosphere
       permitted_use:
         - undefined
-  search_facets:
+  collection_facets:
     - general_data_type
     - inspire_theme
     - gemet_topic

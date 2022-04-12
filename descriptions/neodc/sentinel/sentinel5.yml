@@ -36,7 +36,7 @@ facets:
        attributes:
          - institution
          - sensor
-  aggregation_facets:
+  common_facets:
     - platform
     - processing_level
     - variable

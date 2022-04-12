@@ -28,7 +28,7 @@ facets:
       inputs:
         # /badc/ukmo-rad-hires/data/aberporth/2003/03/metoffice-radiosonde_aberporth_2003031105.edt
         regex: (?P<country>\w*)/(?P<location>\w*)/(?P<operator>\w*)-(?P<instrument_type>\w*)_(?P<instrument_id>\w*)/
-  aggregation_facets:
+  common_facets:
     - country
     - location
     - operator
@@ -36,7 +36,7 @@ facets:
     - wigos_id
     - instrument_letter
     - operator
-  search_facets:
+  collection_facets:
     - instrument_type
 
 

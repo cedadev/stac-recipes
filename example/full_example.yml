@@ -23,10 +23,15 @@ facets:
     name: regex
     inputs:
       regex: (?P<project>\w*)
-  aggregation_facets:
+  common_facets:
     - project
-  search_facets:
+  collection_facets:
     - source_classifier
+  item_facets:
+    - file_directory
+  asset_facets:
+    - start_datetime
+    - end_datetime
 assets:
     defaults: {}
     mappings: {}

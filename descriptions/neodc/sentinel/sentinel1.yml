@@ -47,7 +47,7 @@ facets:
           s1sarl1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-1"
           s1sarl2: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-2"
           gx: "http://www.google.com/kml/ext/2.2"
-  aggregation_facets:
+  common_facets:
     - platform
     - instrument_mode
     - processing_level
