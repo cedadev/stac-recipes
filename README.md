@@ -1,15 +1,15 @@
-[![YAML Validator](https://github.com/cedadev/item-descriptions/actions/workflows/tests.yaml/badge.svg)](https://github.com/cedadev/item-descriptions/actions/workflows/tests.yaml)
+[![YAML Validator](https://github.com/cedadev/collection-descriptions/actions/workflows/tests.yaml/badge.svg)](https://github.com/cedadev/collecion-descriptions/actions/workflows/tests.yaml)
 
-# Item Descriptions
+# Collection Descriptions
 
 These documents are to describe how to process the files within a dataset and extract facets.
 These documents are aggregated along the branch with the information lower in the tree taking 
-precendence. See [example](example/full_example.yml) file or [documentation](https://cedadev.github.io/asset-scanner/item_descriptions/item_descriptions.html)
+precendence. See [example](example/full_example.yml) file or [documentation](https://cedadev.github.io/stac-generator/collection_descriptions/collection_descriptions.html)
 for more details.
 
 ## Validation
 
-The item-descriptions are validated against https://github.com/cedadev/item_description_validator.
+The collection-descriptions are validated against https://github.com/cedadev/collection_description_validator.
 
 If you wish to check your files before committing, there are two options:
 1. Create a python environment and run it manually
@@ -19,8 +19,8 @@ If you wish to check your files before committing, there are two options:
 
 1. `python -m venv venv`
 2. `. venv/bin/activate`
-3. `pip install git+https://github.com/cedadev/item_description_validator`
-4. `item-desc-validator descriptions/`
+3. `pip install git+https://github.com/cedadev/collection_description_validator`
+4. `collection-desc-validator descriptions/`
 
 ### Pre-commit hook
 The hook automates testing on your own machine
