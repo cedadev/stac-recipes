@@ -19,8 +19,8 @@ If you wish to check your files before committing, there are two options:
 
 1. `python -m venv venv`
 2. `. venv/bin/activate`
-3. `pip install git+https://github.com/cedadev/collection_description_validator`
-4. `collection-desc-validator descriptions/`
+3. `pip install git+https://github.com/cedadev/collection-description-validator`
+4. `collection_description_validator descriptions/`
 
 ### Pre-commit hook
 The hook automates testing on your own machine

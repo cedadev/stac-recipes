@@ -21,4 +21,4 @@ jobs:
           pip install git+https://github.com/cedadev/collection-description-validator
       - name: Validate YAML files
         run: |
-          collection-desc-validator descriptions/
+          collection_description_validator descriptions/
