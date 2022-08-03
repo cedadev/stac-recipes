@@ -1,6 +1,6 @@
 repos:
-  - repo: https://github.com/cedadev/item_description_validator.git
+  - repo: https://github.com/cedadev/collection-description-validator.git
     rev: v2.0.0
     hooks:
-      - id: item-desc-validator
+      - id: collection_description_validator
         args: [descriptions/]
