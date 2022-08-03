@@ -9,7 +9,7 @@ for more details.
 
 ## Validation
 
-The collection-descriptions are validated against https://github.com/cedadev/collection_description_validator.
+The collection-descriptions are validated against https://github.com/cedadev/collection-description-validator.
 
 If you wish to check your files before committing, there are two options:
 1. Create a python environment and run it manually
