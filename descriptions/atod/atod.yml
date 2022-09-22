@@ -8,7 +8,7 @@ asset:
     - method: file_stats
       inputs:
         backend: os
-    - method: catagories
+    - method: categories
       inputs:
         - label: metadata
           regex: 00README

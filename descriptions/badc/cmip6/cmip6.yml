@@ -13,7 +13,7 @@ asset:
             - commercial
             - policy
             - personal
-    - method: catagories
+    - method: categories
       inputs:
         categories:
           - label: hidden

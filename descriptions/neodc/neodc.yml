@@ -13,7 +13,7 @@ asset:
     - method: file_stats
       inputs:
         backend: os
-    - method: catagories
+    - method: categories
       inputs:
         categories:
           - label: metadata
