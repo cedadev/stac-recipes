@@ -1,36 +1,61 @@
 paths:
   - /neodc/modis/data
-collections:
-  id: modis
-facets:
-  defaults:
-    properties:
-      general_data_type: satellites
-      permitted_use:
-        - academic
-        - educational
-        - commercial
-        - policy
-        - personal
+
+asset:
   extraction_methods:
-    - name: regex
+    - method: default
+      inputs:
+        defaults:
+          general_data_type: satellites
+          permitted_use:
+            - academic
+            - educational
+            - commercial
+            - policy
+            - personal
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: regex
       description: "Extract hdf files"
       inputs:
         regex: data/(?P<product>\w*)/collection(?P<collection>\d*)/(?P<year>\d*)/(?P<month>\d*)/(?P<day>\d{2})/[\w+\.]+(?P<time_processed>\d*).hdf$
       post_processors:
-        - name: string_join
+        - method: string_join
           inputs:
             key_list:
               - year
               - month
               - day
-            delimiter: '-'
+            delimiter: "-"
             output_key: datetime
-        - name: isodate_processor
+        - method: isodate_processor
           inputs:
             date_keys:
               - datetime
-  aggregation_facets:
-    - product
-    - collection
 
+item:
+  id:
+    method: hash
+    terms:
+      - product
+      - collection
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - product
+            - collection
+            - datetime
+
+collection:
+  id:
+    method: default
+    value: modis
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - product
+            - collection
+            - datetime

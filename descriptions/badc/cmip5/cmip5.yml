@@ -1,32 +1,74 @@
 paths:
   - /badc/cmip5/data/cmip5/
-collections:
-  id: Ca1oVHsBhuk7QqVbE5ej
-facets:
-  defaults:
-    properties:
-      source_classifier: climate models
-      general_data_type: climate models
-      permitted_use:
-        - academic
-        - educational
-        - commercial
-        - policy
-        - personal
+
+asset:
   extraction_methods:
+    - method: default
+      inputs:
+        defaults:
+          source_classifier: climate models
+          general_data_type: climate models
+          permitted_use:
+            - academic
+            - educational
+            - commercial
+            - policy
+            - personal
+    - method: file_stats
+      inputs:
+        backend: os
     - name: regex
       description: "Extract "
       inputs:
         regex: '^\/(?:[^/]*/){3}(?P<project>\w*)\/(?P<product>\w*)\/(?P<institute>\w*)\/(?P<model>\w*)\/(?P<experiment>\w*)\/(?P<time_frequency>\w*)\/(?P<realm>\w*)\/(?P<cmip_table>\w*)\/(?P<ensemble>\w*)\/(?P<version>\w*)\/(?P<variable>\w*)'
-  aggregation_facets:
-    - project
-    - product
-    - institute
-    - model
-    - experiment
-    - time_frequency
-    - realm
-    - cmip_table
-    - ensemble
-    - version
-    - variable
+
+item:
+  id:
+    method: hash
+    terms:
+      - project
+      - product
+      - institute
+      - model
+      - experiment
+      - time_frequency
+      - realm
+      - cmip_table
+      - ensemble
+      - version
+      - variable
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - project
+            - product
+            - institute
+            - model
+            - experiment
+            - time_frequency
+            - realm
+            - cmip_table
+            - ensemble
+            - version
+            - variable
+
+collection:
+  id:
+    method: default
+    value: cmip5
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - project
+            - product
+            - institute
+            - model
+            - experiment
+            - time_frequency
+            - realm
+            - cmip_table
+            - ensemble
+            - version
+            - variable

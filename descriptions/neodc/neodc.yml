@@ -1,19 +1,49 @@
 paths:
   - /neodc
-categories:
-  - label: metadata
-    regex: 00README
-  - label: hidden
-    regex: \/\.
-facets:
-  defaults:
-    properties:
-      general_data_type: undefined
-      inspire_theme: orthoimagery
-      gemet_topic:
-        - environment
-  search_facets:
-    - general_data_type
-    - inspire_theme
-    - gemet_topic
-    - permitted_use
+
+asset:
+  extraction_methods:
+    - method: default
+      inputs:
+        defaults:
+          general_data_type: undefined
+          inspire_theme: orthoimagery
+          gemet_topic:
+            - environment
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: catagories
+      inputs:
+        categories:
+          - label: metadata
+            regex: 00README
+          - label: hidden
+            regex: \/\.
+
+item:
+  id:
+    method: hash
+    terms:
+      - general_data_type
+      - inspire_theme
+      - gemet_topic
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - general_data_type
+            - inspire_theme
+            - gemet_topic
+
+collection:
+  id:
+    method: default
+    value: neodc
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - general_data_type
+            - inspire_theme
+            - gemet_topic

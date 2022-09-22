@@ -1,42 +1,78 @@
 paths:
   - /neodc/avhrr3_metop_a
-  - /neodc/avhrr3_metop_c 
-  - /neodc/gome2_metop_b  
-  - /neodc/iasi_metop_a  
+  - /neodc/avhrr3_metop_c
+  - /neodc/gome2_metop_b
+  - /neodc/iasi_metop_a
   - /neodc/iasi_metop_c
   - /neodc/avhrr3_metop_b
-  - /neodc/gome2_metop_a 
+  - /neodc/gome2_metop_a
   - /neodc/gome2_metop_c
   - /neodc/iasi_metop_b
-collections:
-  id: xxxxxxxxxxx
-facets:
-  defaults:
-    properties:
-      general_data_type: satellites
-      permitted_use:
-        - academic
+
+asset:
   extraction_methods:
-    - name: regex
+    - method: default
+      inputs:
+        defaults:
+          general_data_type: satellites
+          permitted_use:
+            - academic
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: regex
       inputs:
         regex: '^(?P<inst_id>[^_]{4})_(?P<product_type>[^_]{3})_(?P<level>[^_]{2})_(?P<spacecraft_id>[^_]{3})_(?P<sense_starttime>\d{14})Z_(?P<sense_endtime>\d{14})Z_(?P<process_mode>[^_])_(?P<disposition_mode>[^_])_(?P<processing_time>\d{14})Z'
       pre_processors:
-        - name: filename_reducer
+        - method: filename_reducer
       post_processors:
-        - name: isodate_processor
+        - method: isodate_processor
           inputs:
-            format: '%Y%m%d%H%M%S'
+            format: "%Y%m%d%H%M%S"
             date_keys:
               - sense_starttime
               - sense_endtime
               - processing_time
 
-  aggregation_facets:
-    - inst_id
-    - product_type
-    - level
-    - spacecraft_id
-    - process_mode
-    - disposition_mode
-    - sense_starttime
+item:
+  id:
+    method: hash
+    terms:
+      - inst_id
+      - product_type
+      - level
+      - spacecraft_id
+      - process_mode
+      - disposition_mode
+      - sense_starttime
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - inst_id
+            - product_type
+            - level
+            - spacecraft_id
+            - process_mode
+            - disposition_mode
+            - sense_starttime
+            - sense_endtime
+            - processing_time
 
+collection:
+  id:
+    method: default
+    value: xxxxxxxxxxx
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - inst_id
+            - product_type
+            - level
+            - spacecraft_id
+            - process_mode
+            - disposition_mode
+            - sense_starttime
+            - sense_endtime
+            - processing_time

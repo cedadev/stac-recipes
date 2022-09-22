@@ -1,22 +1,53 @@
 paths:
   - /badc
-facets:
-  defaults:
-    properties:
-      source_classifier: undefined
-      general_data_type: undefined
-      inspire_theme: Meteorological geographical features
-      gemet_topic:
-        - Climatology, meteorology, atmosphere
-      permitted_use:
-        - undefined
-  search_facets:
-    - general_data_type
-    - inspire_theme
-    - gemet_topic
-    - permitted_use
-categories:
-  - label: metadata
-    regex: 00README
-  - label: hidden
-    regex: \/\.
+
+asset:
+  extraction_methods:
+    - method: default
+      inputs:
+        defaults:
+          source_classifier: undefined
+          general_data_type: undefined
+          inspire_theme: Meteorological geographical features
+          gemet_topic:
+            - Climatology, meteorology, atmosphere
+          permitted_use:
+            - undefined
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: catagories
+      inputs:
+        categories:
+          - label: metadata
+            regex: 00README
+          - label: hidden
+            regex: \/\.
+
+item:
+  id:
+    method: hash
+    terms:
+      - platform
+      - flight_number
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - general_data_type
+            - inspire_theme
+            - gemet_topic
+            - permitted_use
+
+collection:
+  id:
+    method: default
+    value: badc
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - general_data_type
+            - inspire_theme
+            - gemet_topic
+            - permitted_use

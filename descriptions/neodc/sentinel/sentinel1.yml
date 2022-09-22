@@ -1,24 +1,25 @@
 paths:
   - /neodc/sentinel1a/data
-collections:
-  id: sentinel1a
-facets:
-  defaults:
-    properties:
-      general_data_type: satellites
-      permitted_use:
-        - academic
-        - educational
-        - commercial
-        - policy
-        - personal
+
+asset:
   extraction_methods:
-    - name: regex
-      description: Extract facets from the file path
+    - method: default
+      inputs:
+        defaults:
+          general_data_type: satellites
+          permitted_use:
+            - academic
+            - educational
+            - commercial
+            - policy
+            - personal
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: regex
       inputs:
         regex: '^\/(?:[^/]*/)(?P<platform>\w*)(?:[^/]*/){2}(?P<instrument_mode>\w+)/(?P<processing_level>[A-Z0-9]+)_(?P<product_type>[\w]+)/(?P<processing_software>[A-Z]+)_(?P<product_version>\w+)'
-    - name: regex
-      description: Extract facets from the filename
+    - method: regex
       inputs:
         regex: '^(?:[^_]*_){5}(?P<start_datetime>[0-9T]+)_(?P<end_datetime>[0-9T]+)_(?P<orbit>\d+)'
       pre_processors:
@@ -29,13 +30,12 @@ facets:
             date_keys:
               - start_datetime
               - end_datetime
-    - name: xml_extract
-      description: Extract facets from the manifest files
+    - method: xml_extract
       inputs:
         filter_expr: '\.manifest$'
         extraction_keys:
           - name: instrument_type
-            key: './/safe:instrument/safe:familyName'
+            key: ".//safe:instrument/safe:familyName"
             attribute: abbreviation
         namespaces:
           ns0: "http://www.w3.org/2001/XMLSchema-instance"
@@ -47,10 +47,36 @@ facets:
           s1sarl1: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-1"
           s1sarl2: "http://www.esa.int/safe/sentinel-1.0/sentinel-1/sar/level-2"
           gx: "http://www.google.com/kml/ext/2.2"
-  aggregation_facets:
-    - platform
-    - instrument_mode
-    - processing_level
-    - product_type
-    - product_version
-    - start_datetime
+
+item:
+  id:
+    method: hash
+    terms:
+      - general_data_type
+      - inspire_theme
+      - gemet_topic
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - platform
+            - instrument_mode
+            - processing_level
+            - product_type
+            - product_version
+            - start_datetime
+
+collection:
+  id:
+    method: default
+    value: sentinel1a
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - platform
+            - instrument_mode
+            - processing_level
+            - product_type
+            - product_version
+            - start_datetime

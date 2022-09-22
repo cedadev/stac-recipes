@@ -13,7 +13,7 @@ test:collection-descriptions:
   before_script:
     - pip install git+https://github.com/cedadev/collection-description-validator
   script:
-    - collection-desc-validator descriptions/
+    - collection_description_validator descriptions/
 
 .build_common:
   extends: .build_docker

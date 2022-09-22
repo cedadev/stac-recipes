@@ -1,51 +1,89 @@
 paths:
   - /badc/cmip6/data/
-categories:
-  - label: hidden
-    regex: files
-collections:
-  id: cmip6
-  defaults:
-    license: CC-BY-SA-4.0
-facets:
-  defaults:
-    properties:
-      general_data_type: climate models
-      permitted_use:
-        - academic
-        - educational
-        - commercial
-        - policy
-        - personal
+
+asset:
   extraction_methods:
-    - name: regex
+    - method: default
+      inputs:
+        defaults:
+          general_data_type: climate models
+          permitted_use:
+            - academic
+            - educational
+            - commercial
+            - policy
+            - personal
+    - method: catagories
+      inputs:
+        categories:
+          - label: hidden
+            regex: files
+    - method: regex
       inputs:
         regex: '^(?P<var_id>[^_]+)_(?P<table_id>[^_]+)_(?P<source_id>[^_]+)_(?P<experiment_id>[^_]+)_r(?P<realization_index>\d*)i(?P<initialisation_index>\d*)p(?P<physics_index>\d*)f(?P<forcing_index>\d*)_(?P<grid_label>[^_.]+)'
       pre_processors:
-        - name: filename_reducer
-    - name: regex
+        - method: filename_reducer
+    - method: regex
       inputs:
         regex: '_(?P<start_datetime>\d*)-(?P<end_datetime>\d*)\.'
       pre_processors:
-        - name: filename_reducer
+        - method: filename_reducer
       post_processors:
-        - name: isodate_processor
+        - method: isodate_processor
           inputs:
-            format: '%Y%m'
+            format: "%Y%m"
             date_keys:
               - start_datetime
               - end_datetime
-    - name: regex
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: regex
       inputs:
         regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/)'
-    - name: regex
+    - method: regex
       inputs:
         regex: '^\/(?:[^/]*/){12}v(?P<version>\w*)'
-  aggregation_facets:
-    - mip_era
-    - activity_id
-    - institution_id
-    - table_id
-    - source_id
-    - var_id
-    - version
+
+item:
+  id:
+    method: hash
+    terms:
+      - mip_era
+      - activity_id
+      - institution_id
+      - table_id
+      - source_id
+      - var_id
+      - version
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        - list:
+            - mip_era
+            - activity_id
+            - institution_id
+            - table_id
+            - source_id
+            - var_id
+            - version
+
+collection:
+  id:
+    method: default
+    value: cmip6
+  extraction_methods:
+    - method: default
+      inputs:
+        defaults:
+          license: CC-BY-SA-4.0
+    - method: elasticsearch
+      inputs:
+        - list:
+            - mip_era
+            - activity_id
+            - institution_id
+            - table_id
+            - source_id
+            - var_id
+            - version
