@@ -33,11 +33,11 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - general_data_type
-            - inspire_theme
-            - gemet_topic
-            - permitted_use
+        list:
+          - general_data_type
+          - inspire_theme
+          - gemet_topic
+          - permitted_use
 
 collection:
   id:
@@ -46,8 +46,8 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - general_data_type
-            - inspire_theme
-            - gemet_topic
-            - permitted_use
+        list:
+          - general_data_type
+          - inspire_theme
+          - gemet_topic
+          - permitted_use

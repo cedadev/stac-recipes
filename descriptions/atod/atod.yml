@@ -10,8 +10,9 @@ asset:
         backend: os
     - method: categories
       inputs:
-        - label: metadata
-          regex: 00README
+        categories:
+          - label: metadata
+            regex: 00README
 
 item:
   id:
@@ -22,21 +23,21 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - _dir1
-            - _dir2
-            - _dir3
-            - _dir4
-            - _dir5
-            - _dir6
-            - _dir7
-            - _dir8
-            - _dir9
-            - _dir10
-            - _dir11
-            - _dir12
-            - _dir13
-            - _dir14
+        list:
+          - _dir1
+          - _dir2
+          - _dir3
+          - _dir4
+          - _dir5
+          - _dir6
+          - _dir7
+          - _dir8
+          - _dir9
+          - _dir10
+          - _dir11
+          - _dir12
+          - _dir13
+          - _dir14
 
 collection:
   id:
@@ -45,18 +46,18 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - _dir1
-            - _dir2
-            - _dir3
-            - _dir4
-            - _dir5
-            - _dir6
-            - _dir7
-            - _dir8
-            - _dir9
-            - _dir10
-            - _dir11
-            - _dir12
-            - _dir13
-            - _dir14
+        list:
+          - _dir1
+          - _dir2
+          - _dir3
+          - _dir4
+          - _dir5
+          - _dir6
+          - _dir7
+          - _dir8
+          - _dir9
+          - _dir10
+          - _dir11
+          - _dir12
+          - _dir13
+          - _dir14

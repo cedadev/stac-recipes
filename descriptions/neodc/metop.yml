@@ -24,9 +24,9 @@ asset:
       inputs:
         regex: '^(?P<inst_id>[^_]{4})_(?P<product_type>[^_]{3})_(?P<level>[^_]{2})_(?P<spacecraft_id>[^_]{3})_(?P<sense_starttime>\d{14})Z_(?P<sense_endtime>\d{14})Z_(?P<process_mode>[^_])_(?P<disposition_mode>[^_])_(?P<processing_time>\d{14})Z'
       pre_processors:
-        - method: filename_reducer
+        - method: basename
       post_processors:
-        - method: isodate_processor
+        - method: iso_date
           inputs:
             format: "%Y%m%d%H%M%S"
             date_keys:
@@ -48,16 +48,16 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - inst_id
-            - product_type
-            - level
-            - spacecraft_id
-            - process_mode
-            - disposition_mode
-            - sense_starttime
-            - sense_endtime
-            - processing_time
+        list:
+          - inst_id
+          - product_type
+          - level
+          - spacecraft_id
+          - process_mode
+          - disposition_mode
+          - sense_starttime
+          - sense_endtime
+          - processing_time
 
 collection:
   id:
@@ -66,13 +66,13 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - inst_id
-            - product_type
-            - level
-            - spacecraft_id
-            - process_mode
-            - disposition_mode
-            - sense_starttime
-            - sense_endtime
-            - processing_time
+        list:
+          - inst_id
+          - product_type
+          - level
+          - spacecraft_id
+          - process_mode
+          - disposition_mode
+          - sense_starttime
+          - sense_endtime
+          - processing_time

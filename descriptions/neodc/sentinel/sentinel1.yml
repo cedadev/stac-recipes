@@ -23,14 +23,14 @@ asset:
       inputs:
         regex: '^(?:[^_]*_){5}(?P<start_datetime>[0-9T]+)_(?P<end_datetime>[0-9T]+)_(?P<orbit>\d+)'
       pre_processors:
-        - name: filename_reducer
+        - method: basename
       post_processors:
-        - name: isodate_processor
+        - method: iso_date
           inputs:
             date_keys:
               - start_datetime
               - end_datetime
-    - method: xml_extract
+    - method: xml
       inputs:
         filter_expr: '\.manifest$'
         extraction_keys:
@@ -58,13 +58,13 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - platform
-            - instrument_mode
-            - processing_level
-            - product_type
-            - product_version
-            - start_datetime
+        list:
+          - platform
+          - instrument_mode
+          - processing_level
+          - product_type
+          - product_version
+          - start_datetime
 
 collection:
   id:
@@ -73,10 +73,10 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - platform
-            - instrument_mode
-            - processing_level
-            - product_type
-            - product_version
-            - start_datetime
+        list:
+          - platform
+          - instrument_mode
+          - processing_level
+          - product_type
+          - product_version
+          - start_datetime

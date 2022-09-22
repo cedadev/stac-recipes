@@ -17,7 +17,7 @@ asset:
     - method: file_stats
       inputs:
         backend: os
-    - name: regex
+    - method: regex
       description: "Extract "
       inputs:
         regex: '^\/(?:[^/]*/){3}(?P<project>\w*)\/(?P<product>\w*)\/(?P<institute>\w*)\/(?P<model>\w*)\/(?P<experiment>\w*)\/(?P<time_frequency>\w*)\/(?P<realm>\w*)\/(?P<cmip_table>\w*)\/(?P<ensemble>\w*)\/(?P<version>\w*)\/(?P<variable>\w*)'
@@ -40,18 +40,18 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - project
-            - product
-            - institute
-            - model
-            - experiment
-            - time_frequency
-            - realm
-            - cmip_table
-            - ensemble
-            - version
-            - variable
+        list:
+          - project
+          - product
+          - institute
+          - model
+          - experiment
+          - time_frequency
+          - realm
+          - cmip_table
+          - ensemble
+          - version
+          - variable
 
 collection:
   id:
@@ -60,15 +60,15 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - project
-            - product
-            - institute
-            - model
-            - experiment
-            - time_frequency
-            - realm
-            - cmip_table
-            - ensemble
-            - version
-            - variable
+        list:
+          - project
+          - product
+          - institute
+          - model
+          - experiment
+          - time_frequency
+          - realm
+          - cmip_table
+          - ensemble
+          - version
+          - variable

@@ -31,10 +31,10 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - general_data_type
-            - inspire_theme
-            - gemet_topic
+        list:
+          - general_data_type
+          - inspire_theme
+          - gemet_topic
 
 collection:
   id:
@@ -43,7 +43,7 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - general_data_type
-            - inspire_theme
-            - gemet_topic
+        list:
+          - general_data_type
+          - inspire_theme
+          - gemet_topic

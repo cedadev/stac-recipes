@@ -13,9 +13,9 @@ asset:
       inputs:
         regex: ^(?P<instrument>[^_]*)_(?P<platfrom>[^_]*)_(?P<startdate>\d{8})(?P<starttime>\d*)(_(?P<extra>))?\.
       pre_processors:
-        - method: filename_reducer
+        - method: basename
       post_processors:
-        - method: isodate_processor
+        - method: iso_date
           inputs:
             format: "%Y%m%d"
             date_keys:
@@ -31,12 +31,12 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - instrument
-            - platfrom
-            - extra
-            - startdate
-            - starttime
+        list:
+          - instrument
+          - platfrom
+          - extra
+          - startdate
+          - starttime
 
 collection:
   id:
@@ -45,9 +45,9 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - instrument
-            - platfrom
-            - extra
-            - startdate
-            - starttime
+        list:
+          - instrument
+          - platfrom
+          - extra
+          - startdate
+          - starttime

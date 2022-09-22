@@ -29,7 +29,7 @@ asset:
               - day
             delimiter: "-"
             output_key: datetime
-        - method: isodate_processor
+        - method: iso_date
           inputs:
             date_keys:
               - datetime
@@ -43,10 +43,10 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - product
-            - collection
-            - datetime
+        list:
+          - product
+          - collection
+          - datetime
 
 collection:
   id:
@@ -55,7 +55,7 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - product
-            - collection
-            - datetime
+        list:
+          - product
+          - collection
+          - datetime

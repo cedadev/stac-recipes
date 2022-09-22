@@ -24,15 +24,15 @@ asset:
       inputs:
         regex: '^(?:[^_]*_){2}(?P<processing_level>[^_]+)__(?P<variable>[^_]+)_{4}(?P<start_datetime>[0-9T]+)_(?P<end_datetime>[0-9T]+)_(?P<orbit>\d+)(?:[^_]*_){3}(?P<datetime>[0-9T]+)'
       pre_processors:
-        - method: filename_reducer
+        - method: basename
       post_processors:
-        - method: isodate_processor
+        - method: iso_date
           inputs:
             date_keys:
               - start_datetime
               - end_datetime
               - datetime
-    - method: header_extract
+    - method: header
       description: Extract header metadata
       inputs:
         attributes:
@@ -51,12 +51,12 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - platform
-            - processing_level
-            - variable
-            - product_version
-            - datetime
+        list:
+          - platform
+          - processing_level
+          - variable
+          - product_version
+          - datetime
 
 collection:
   id:
@@ -65,9 +65,9 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - platform
-            - processing_level
-            - variable
-            - product_version
-            - datetime
+        list:
+          - platform
+          - processing_level
+          - variable
+          - product_version
+          - datetime

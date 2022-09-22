@@ -21,7 +21,7 @@ asset:
       inputs:
         regex: L2_(?P<wigos_id>[a-zA-Z0-9\-]*)_(?P<instrument_letter>\w{1})(?P<startdate>\d{8})(\d{4})\.nc
       post_processors:
-        - name: isodate_processor
+        - method: iso_date
           inputs:
             format: "%Y%m%d"
             date_keys:
@@ -46,14 +46,14 @@ item:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - country
-            - location
-            - operator
-            - instrument_type
-            - wigos_id
-            - instrument_letter
-            - operator
+        list:
+          - country
+          - location
+          - operator
+          - instrument_type
+          - wigos_id
+          - instrument_letter
+          - operator
 
 collection:
   id:
@@ -62,11 +62,11 @@ collection:
   extraction_methods:
     - method: elasticsearch
       inputs:
-        - list:
-            - country
-            - location
-            - operator
-            - instrument_type
-            - wigos_id
-            - instrument_letter
-            - operator
+        list:
+          - country
+          - location
+          - operator
+          - instrument_type
+          - wigos_id
+          - instrument_letter
+          - operator
