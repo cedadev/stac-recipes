@@ -1,27 +1,53 @@
 paths:
   - /badc/bortas/data
-  - /badc/caesar/data 
-  - /badc/cap/data  
-  - /badc/cast/data 
-collections:
-  id: xxxxxxxxxxx
-facets:
+  - /badc/caesar/data
+  - /badc/cap/data
+  - /badc/cast/data
+
+asset:
   extraction_methods:
-    - name: regex
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: regex
       inputs:
         regex: ^(?P<instrument>[^_]*)_(?P<platfrom>[^_]*)_(?P<startdate>\d{8})(?P<starttime>\d*)(_(?P<extra>))?\.
       pre_processors:
-        - name: filename_reducer
+        - method: basename
       post_processors:
-        - name: isodate_processor
+        - method: iso_date
           inputs:
-            format: '%Y%m%d'
+            format: "%Y%m%d"
             date_keys:
               - startdate
 
-  aggregation_facets:
-    - instrument
-    - platfrom
-    - extra
+item:
+  id:
+    method: hash
+    terms:
+      - instrument
+      - platfrom
+      - extra
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        list:
+          - instrument
+          - platfrom
+          - extra
+          - startdate
+          - starttime
 
-
+collection:
+  id:
+    method: default
+    value: xxxxxxxxxxx
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        list:
+          - instrument
+          - platfrom
+          - extra
+          - startdate
+          - starttime

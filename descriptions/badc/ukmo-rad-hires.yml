@@ -1,35 +1,58 @@
 paths:
   - /badc/ukmo-rad-hires/data
-collections:
-  id: ukmo-rad-hires
-facets:
-  defaults:
-    properties:
-      general_data_type: other mobile platforms
-      instrument_type: radiosonde
-      permitted_use:
-        - academic
-        - eductational
+
+asset:
   extraction_methods:
-    - name: regex
+    - method: default
+      inputs:
+        defaults:
+          general_data_type: other mobile platforms
+          instrument_type: radiosonde
+          permitted_use:
+            - academic
+            - eductational
+    - method: file_stats
+      inputs:
+        backend: os
+    - method: regex
       description: "Extract "
       inputs:
         # /badc/ukmo-rad-hires/data/aberporth/2003/03/metoffice-radiosonde_aberporth_2003031105.edt
         regex: data/(?P<station>\w*)/(?P<year>\d*)/(?P<month>\d*)/[\w\-]+_(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})(?P<hour>\d{2}).edt$
       post_processors:
-        - name: string_join
+        - method: string_join
           inputs:
             key_list:
               - year
               - month
               - day
-            delimiter: '-'
+            delimiter: "-"
             output_key: datetime
-        - name: isodate_processor
+        - method: iso_date
           inputs:
             date_keys:
               - datetime
-  aggregation_facets:
-    - station
-    - year
 
+item:
+  id:
+    method: hash
+    terms:
+      - station
+      - year
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        list:
+          - station
+          - year
+
+collection:
+  id:
+    method: default
+    value: ukmo-rad-hires
+  extraction_methods:
+    - method: elasticsearch
+      inputs:
+        list:
+          - station
+          - year
