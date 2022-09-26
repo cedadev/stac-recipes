@@ -3,6 +3,7 @@ paths:
 
 asset:
   extraction_methods:
+    - method: path_parts
     - method: default
       inputs:
         defaults:
@@ -10,9 +11,11 @@ asset:
           general_data_type: undefined
           inspire_theme: Meteorological geographical features
           gemet_topic:
-            - Climatology, meteorology, atmosphere
-          permitted_use:
-            - undefined
+            - climatology
+            - meteorology
+            - atmosphere
+          permitted_use: undefined
+    - method: path_parts
     - method: file_stats
       inputs:
         backend: os
@@ -28,8 +31,8 @@ item:
   id:
     method: hash
     terms:
-      - platform
-      - flight_number
+      - _dir1
+      - _dir2
   extraction_methods:
     - method: elasticsearch
       inputs:
@@ -38,6 +41,20 @@ item:
           - inspire_theme
           - gemet_topic
           - permitted_use
+          - _dir1
+          - _dir2
+          - _dir3
+          - _dir4
+          - _dir5
+          - _dir6
+          - _dir7
+          - _dir8
+          - _dir9
+          - _dir10
+          - _dir11
+          - _dir12
+          - _dir13
+          - _dir14
 
 collection:
   id:
@@ -51,3 +68,17 @@ collection:
           - inspire_theme
           - gemet_topic
           - permitted_use
+          - _dir1
+          - _dir2
+          - _dir3
+          - _dir4
+          - _dir5
+          - _dir6
+          - _dir7
+          - _dir8
+          - _dir9
+          - _dir10
+          - _dir11
+          - _dir12
+          - _dir13
+          - _dir14

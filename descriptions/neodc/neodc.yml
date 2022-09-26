@@ -3,13 +3,13 @@ paths:
 
 asset:
   extraction_methods:
+    - method: path_parts
     - method: default
       inputs:
         defaults:
           general_data_type: undefined
           inspire_theme: orthoimagery
-          gemet_topic:
-            - environment
+          gemet_topic: environment
     - method: file_stats
       inputs:
         backend: os
@@ -25,9 +25,8 @@ item:
   id:
     method: hash
     terms:
-      - general_data_type
-      - inspire_theme
-      - gemet_topic
+      - _dir1
+      - _dir2
   extraction_methods:
     - method: elasticsearch
       inputs:
@@ -35,6 +34,20 @@ item:
           - general_data_type
           - inspire_theme
           - gemet_topic
+          - _dir1
+          - _dir2
+          - _dir3
+          - _dir4
+          - _dir5
+          - _dir6
+          - _dir7
+          - _dir8
+          - _dir9
+          - _dir10
+          - _dir11
+          - _dir12
+          - _dir13
+          - _dir14
 
 collection:
   id:
@@ -47,3 +60,17 @@ collection:
           - general_data_type
           - inspire_theme
           - gemet_topic
+          - _dir1
+          - _dir2
+          - _dir3
+          - _dir4
+          - _dir5
+          - _dir6
+          - _dir7
+          - _dir8
+          - _dir9
+          - _dir10
+          - _dir11
+          - _dir12
+          - _dir13
+          - _dir14
