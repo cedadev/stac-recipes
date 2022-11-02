@@ -17,9 +17,7 @@ asset:
           general_data_type: satellites
           permitted_use:
             - academic
-    - method: file_stats
-      inputs:
-        backend: os
+    - method: os_stats
     - method: regex
       inputs:
         regex: '^(?P<inst_id>[^_]{4})_(?P<product_type>[^_]{3})_(?P<level>[^_]{2})_(?P<spacecraft_id>[^_]{3})_(?P<sense_starttime>\d{14})Z_(?P<sense_endtime>\d{14})Z_(?P<process_mode>[^_])_(?P<disposition_mode>[^_])_(?P<processing_time>\d{14})Z'

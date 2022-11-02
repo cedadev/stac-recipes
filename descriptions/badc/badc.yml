@@ -16,9 +16,7 @@ asset:
             - atmosphere
           permitted_use: undefined
     - method: path_parts
-    - method: file_stats
-      inputs:
-        backend: os
+    - method: os_stats
     - method: categories
       inputs:
         categories:

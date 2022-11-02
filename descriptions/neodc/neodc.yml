@@ -10,9 +10,7 @@ asset:
           general_data_type: undefined
           inspire_theme: orthoimagery
           gemet_topic: environment
-    - method: file_stats
-      inputs:
-        backend: os
+    - method: os_stats
     - method: categories
       inputs:
         categories:

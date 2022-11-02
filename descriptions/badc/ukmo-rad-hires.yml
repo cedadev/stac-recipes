@@ -11,9 +11,7 @@ asset:
           permitted_use:
             - academic
             - eductational
-    - method: file_stats
-      inputs:
-        backend: os
+    - method: os_stats
     - method: regex
       description: "Extract "
       inputs:

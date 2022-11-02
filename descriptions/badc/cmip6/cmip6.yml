@@ -35,9 +35,7 @@ asset:
             date_keys:
               - start_datetime
               - end_datetime
-    - method: file_stats
-      inputs:
-        backend: os
+    - method: os_stats
     - method: regex
       inputs:
         regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/)'
