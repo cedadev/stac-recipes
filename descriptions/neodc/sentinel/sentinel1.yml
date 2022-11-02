@@ -13,9 +13,7 @@ asset:
             - commercial
             - policy
             - personal
-    - method: file_stats
-      inputs:
-        backend: os
+    - method: os_stats
     - method: regex
       inputs:
         regex: '^\/(?:[^/]*/)(?P<platform>\w*)(?:[^/]*/){2}(?P<instrument_mode>\w+)/(?P<processing_level>[A-Z0-9]+)_(?P<product_type>[\w]+)/(?P<processing_software>[A-Z]+)_(?P<product_version>\w+)'

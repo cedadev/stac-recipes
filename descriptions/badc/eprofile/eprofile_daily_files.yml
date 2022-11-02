@@ -14,9 +14,7 @@ asset:
             - commercial
             - policy
             - personal
-    - method: file_stats
-      inputs:
-        backend: os
+    - method: os_stats
     - method: regex
       inputs:
         regex: L2_(?P<wigos_id>[a-zA-Z0-9\-]*)_(?P<instrument_letter>\w{1})(?P<startdate>\d{8})(\d{4})\.nc
