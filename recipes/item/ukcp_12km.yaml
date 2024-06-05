@@ -1,0 +1,264 @@
+paths:
+  - /badc/ukcp18/data
+
+type: item
+
+# This will be run over the directorties, example: /badc/ukcp18/data/land-cpm/uk/5km/rcp85/01/clt/day/v20210615
+
+id:
+  # Use directory name ID
+  - method: default
+    inputs:
+      defaults:
+        item_id: $dataset_id
+
+extraction_methods:
+  - method: default
+    inputs:
+      defaults:
+        latest: True
+
+  - method: string_template
+    inputs:
+      template: '{uri}/.*20[678].*-20[678].*.nc'
+      output_key: data_regex
+
+  # Collect assets and extract datetimes
+  - method: elasticsearch_assets
+    inputs:
+      search_field: path
+      regex_term: data_regex
+      fields:
+        - name: size
+        - name: location
+      extraction_methods:
+        - method: default
+          inputs:
+            defaults:
+              roles: ["data"]
+              checksum: null
+              checksum_type: null
+              type: application/netcdf
+
+        - method: regex
+          inputs:
+            regex: '(?P<start_datetime>\d*)-(?P<end_datetime>\d*)\.nc$'
+            input_term: href
+
+        - method: lambda
+          inputs:
+            function: 'lambda start_datetime: start_datetime + "00000101000000"[len(start_datetime):]'
+            input_args:
+              - $start_datetime
+            output_key: start_datetime
+
+        - method: lambda
+          inputs:
+            function: 'lambda end_datetime: end_datetime + "00001231235959"[len(end_datetime):]'
+            input_args:
+              - $end_datetime
+            output_key: end_datetime
+
+        - method: iso_date
+          inputs:
+            date_keys:
+              - start_datetime
+              - end_datetime
+            formats:
+              - '%Y%m%d%H%M%S'
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: {f"data{str(en+1).zfill(4)}": assets[key] for en, key in enumerate(sorted(assets))}'
+      input_args:
+        - $assets
+      output_key: assets
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: list(assets.values())[0]["href"]'
+      input_args:
+        - $assets
+      output_key: first_filepath
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: list(assets.values())[-1]["href"]'
+      input_args:
+        - $assets
+      output_key: last_filepath
+
+  # Extract information from the path
+  - method: regex
+    inputs:
+      input_term: first_filepath
+      regex: '.*\/(?P<var_id>\w*)\/.*\/v\d{8}\/.*nc$'
+      # regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/){6}(?P<version>\w*)\/(?P<var_id>[^_]+)_(?P<table_id>[^_]+)_(?P<source_id>[^_]+)_(?P<experiment_id>[^_]+)_r(?P<realization_index>\d*)i(?P<initialisation_index>\d*)p(?P<physics_index>\d*)f(?P<forcing_index>\d*)_(?P<grid_label>[^_.]+)'
+
+  - method: lambda
+    inputs:
+      function: 'lambda uri: "ukcp." + uri.replace("/badc/ukcp18/data", "").strip("/").replace("/", ".")'
+      input_args:
+        - $uri
+      output_key: dataset_id
+
+  - method: netcdf
+    inputs:
+      input_term: first_filepath
+      variable_id: $var_id
+      variable_terms:
+        - name: variable_long_name
+          key: long_name
+        - name: variable_units
+          key: units
+        - name: cf_standard_name
+          key: standard_name
+      global_terms:
+        - name: sub_collection
+          key: collection
+        - name: domain
+        - name: frequency
+        - name: institution
+        - name: project
+        - name: references
+        - name: resolution
+        - name: scenario
+        - name: version
+        - name: Conventions
+      cf_terms:
+        - name: start_datetime
+          key: time
+        - name: latitude
+        - name: longitude
+        # - name: levels
+        #   key: Z
+
+  # - method: lambda
+  #   inputs:
+  #     function: 'lambda levels: [float(levels.values[0]), float(levels.values[-1])] if levels.values.ndim == 1 else [float(levels.values), float(levels.values)]'
+  #     input_args:
+  #       - $levels
+  #     output_key: levels
+
+  - method: lambda
+    inputs:
+      function: 'lambda time: str(time.values[0])'
+      input_args:
+        - $start_datetime
+      output_key: start_datetime
+
+  - method: lambda
+    inputs:
+      function: 'lambda latitude: float(latitude.min()) if hasattr(latitude, "min") else latitude'
+      input_args:
+        - $latitude
+      output_key: south
+
+  - method: lambda
+    inputs:
+      function: 'lambda latitude: float(latitude.max()) if hasattr(latitude, "max") else latitude'
+      input_args:
+        - $latitude
+      output_key: north
+
+  - method: lambda
+    inputs:
+      function: 'lambda longitude: float(longitude.min()) if hasattr(longitude, "min") else longitude'
+      input_args:
+        - $longitude
+      output_key: west
+
+  - method: lambda
+    inputs:
+      function: 'lambda longitude: float(longitude.max()) if hasattr(longitude, "max") else longitude'
+      input_args:
+        - $longitude
+      output_key: east
+
+  - method: geometry_polygon
+    inputs:
+      coordinate_keys:
+        -
+          - west
+          - south
+        -
+          - east
+          - south
+        -
+          - east
+          - north
+        -
+          - west
+          - north
+        -
+          - west
+          - south
+
+  - method: geometry_to_bbox
+    inputs:
+      type: polygon
+
+  - method: netcdf
+    inputs:
+      input_term: last_filepath
+      cf_terms:
+        - name: end_datetime
+          key: time
+
+  - method: lambda
+    inputs:
+      function: 'lambda time: str(time.values[-1])'
+      input_args:
+        - $end_datetime
+      output_key: end_datetime
+
+  - method: iso_date
+    inputs:
+      date_keys:
+        - start_datetime
+        - end_datetime
+      formats:
+        - '%Y-%m-%dT%H:%M:%SZ'
+
+  - method: datetime_bound_to_centroid
+    inputs:
+      start_term:
+        name: start_datetime
+        format: '%Y-%m-%d %H:%M:%S'
+      end_term:
+        name: end_datetime
+        format: '%Y-%m-%d %H:%M:%S'
+
+  - method: string_template
+    inputs:
+      template: 'https://dap.ceda.ac.uk/badc/cmip18/metadata/kerchunk/by_dset/UKCP/{sub_collection}/{domain}/{resolution}/{scenario}/{var_id}/{frequency}/{dataset_id}.zstd'
+      output_key: kerchunk_href
+
+  # Add BBox to each asset
+  - method: lambda
+    inputs:
+      function: 'lambda kerchunk_href, assets, bbox: {"reference_file": {"checksum": None,"checksum_type": None,"href": kerchunk_href,"roles": ["reference", "data"],"size": None,"type": "application/zstd","open_zarr_kwargs": {"decode_times": True}}} | {asset_key: asset_value | {"bbox": bbox, "href": "https://dap.ceda.ac.uk" + asset_value["href"]} for asset_key, asset_value in assets.items()}'
+      input_args:
+        - $kerchunk_href
+        - $assets
+        - $bbox
+      output_key: assets
+
+  # Clean up unneeded terms
+  - method: remove
+    inputs:
+      keys:
+        - uri
+        - latitude
+        - longitude
+        - data_regex
+        - first_filepath
+        - last_filepath
+        - west
+        - south
+        - east
+        - north
+
+
+member_of:
+  - recipes/collection/ukcp.yaml

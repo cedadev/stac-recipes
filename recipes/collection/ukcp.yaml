@@ -1,0 +1,85 @@
+type: collection
+
+id:
+  # Use default ID
+  - method: default
+    inputs:
+      defaults:
+        collection_id: ukcp
+
+extraction_methods:
+  # Extract information from the path
+  - method: default
+    inputs:
+      defaults:
+        license: ogl-3.0
+        description: UKCP
+
+  - method: elasticsearch_aggregation
+    inputs:
+      id_term: collection
+      index: items_ukcp
+      geo_bounds:
+        - key: geometry
+      min:
+        - key: properties.start_datetime
+          name: start_datetime
+      max:
+        - key: properties.end_datetime
+          name: end_datetime
+      list:
+        - key: properties.var_id
+          name: var_id
+        - key: properties.dataset_id
+          name: dataset_id
+        - key: properties.kerchunk_url
+          name: kerchunk_url
+        - key: properties.variable_long_name
+          name: variable_long_name
+        - key: properties.variable_units
+          name: variable_units
+        - key: properties.cf_standard_name
+          name: cf_standard_name
+        - key: properties.collection
+          name: collection
+        - key: properties.domain
+          name: domain
+        - key: properties.frequency
+          name: frequency
+        - key: properties.institution
+          name: institution
+        - key: properties.project
+          name: project
+        - key: properties.references
+          name: references
+        - key: properties.resolution
+          name: resolution
+        - key: properties.scenario
+          name: scenario
+        - key: properties.version
+          name: version
+        - key: properties.Conventions
+          name: Conventions
+
+  - method: lambda
+    inputs:
+      function: 'lambda geometry: [[geometry["top_left"]["lon"], geometry["bottom_right"]["lat"], geometry["bottom_right"]["lon"], geometry["top_left"]["lat"]]]'
+      input_args:
+        - $geometry
+      output_key: bbox
+
+  - method: lambda
+    inputs:
+      function: 'lambda start_datetime, end_datetime: [[start_datetime, end_datetime]]'
+      input_args:
+        - $start_datetime
+        - $end_datetime
+      output_key: interval
+
+  - method: remove
+    inputs:
+      keys:
+        - uri
+        - geometry
+        - start_datetime
+        - end_datetime

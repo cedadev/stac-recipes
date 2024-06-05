@@ -1,0 +1,94 @@
+type: collection
+
+id:
+  # Use default ID
+  - method: default
+    inputs:
+      defaults:
+        collection_id: sentinel1
+
+
+extraction_methods:
+  # Extract information from the path
+  - method: default
+    inputs:
+      defaults:
+        license: sentinel
+        description: Sentinel 1
+
+  - method: elasticsearch_aggregation
+    inputs:
+      id_term: collection
+      index: items_sentinel1
+      geo_bounds:
+        - key: geometry
+      min:
+        - key: properties.start_datetime
+          name: start_datetime
+      max:
+        - key: properties.end_datetime
+          name: end_datetime
+      list:
+        - key: properties.platform
+          name: platform
+        - key: properties.instrument_mode
+          name: instrument_mode
+        - key: properties.processing_level
+          name: processing_level
+        - key: properties.product_type
+          name: product_type
+        - key: properties.processing_software
+          name: processing_software
+        - key: properties.product_version
+          name: product_version
+        - key: properties.orbit
+          name: orbit
+        - key: properties.Instrument Family Name
+          name: Instrument Family Name
+        - key: properties.Instrument Family Name Abbreviation
+          name: Instrument Family Name Abbreviation
+        - key: properties.Platform Number
+          name: Platform Number
+        - key: properties.NSSDC Identifier
+          name: NSSDC Identifier
+        - key: properties.Start Relative Orbit Number
+          name: Start Relative Orbit Number
+        - key: properties.Start Orbit Number
+          name: Start Orbit Number
+        - key: properties.Instrument Mode
+          name: Instrument Mode
+        - key: properties.Slice Number
+          name: Slice Number
+        - key: properties.Total Slices
+          name: Total Slices
+        - key: properties.Polarisation
+          name: Polarisation
+        - key: properties.Processing Version
+          name: Processing Version
+        - key: properties.Orbit Direction
+          name: Orbit Direction
+        - key: properties.EPSG
+          name: EPSG
+
+  - method: lambda
+    inputs:
+      function: 'lambda geometry: [[geometry["top_left"]["lon"], geometry["bottom_right"]["lat"], geometry["bottom_right"]["lon"], geometry["top_left"]["lat"]]]'
+      input_args:
+        - $geometry
+      output_key: bbox
+
+  - method: lambda
+    inputs:
+      function: 'lambda start_datetime, end_datetime: [[start_datetime, end_datetime]]'
+      input_args:
+        - $start_datetime
+        - $end_datetime
+      output_key: interval
+
+  - method: remove
+    inputs:
+      keys:
+        - uri
+        - geometry
+        - start_datetime
+        - end_datetime

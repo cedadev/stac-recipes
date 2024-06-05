@@ -1,0 +1,107 @@
+paths:
+  - /badc/cmip6/data
+
+type: collection
+
+# This will be run over the directorties, example: /badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-MM/historical/r1i1p1f3/6hrPlev/tas/gn/v20200923
+
+id:
+  - method: default
+    inputs:
+      defaults:
+        collection_id: cmip6
+
+extraction_methods:
+  # Extract information from the path
+  - method: default
+    inputs:
+      defaults:
+        license: cmip6
+        description: CMIP6
+
+  - method: elasticsearch_aggregation
+    inputs:
+      id_term: collection
+      index: items_cmip6
+      geo_bounds:
+        - key: geometry
+      min:
+        - key: properties.start_datetime
+          name: start_datetime
+      max:
+        - key: properties.end_datetime
+          name: end_datetime
+      list:
+        - key: properties.mip_era
+          name: mip_era
+        - key: properties.activity_id
+          name: activity_id
+        - key: properties.institution_id
+          name: institution_id
+        - key: properties.version
+          name: version
+        - key: properties.var_id
+          name: var_id
+        - key: properties.table_id
+          name: table_id
+        - key: properties.source_id
+          name: source_id
+        - key: properties.experiment_id
+          name: experiment_id
+        - key: properties.realization_index
+          name: realization_index
+        - key: properties.initialisation_index
+          name: initialisation_index
+        - key: properties.physics_index
+          name: physics_index
+        - key: properties.forcing_index
+          name: forcing_index
+        - key: properties.grid_label
+          name: grid_label
+        - key: properties.instance_id
+          name: instance_id
+        - key: properties.variable_long_name
+          name: variable_long_name
+        - key: properties.variable_units
+          name: variable_units
+        - key: properties.cf_standard_name
+          name: cf_standard_name
+        - key: properties.data_specs_version
+          name: data_specs_version
+        - key: properties.experiment_title
+          name: experiment_title
+        - key: properties.frequency
+          name: frequency
+        - key: properties.grid
+          name: grid
+        - key: properties.source_type
+          name: source_type
+        - key: properties.sub_experiment_id
+          name: sub_experiment_id
+        - key: properties.variable_id
+          name: variable_id
+        - key: properties.variant_label
+          name: variant_label
+
+  - method: lambda
+    inputs:
+      function: 'lambda geometry: [[geometry["top_left"]["lon"], geometry["bottom_right"]["lat"], geometry["bottom_right"]["lon"], geometry["top_left"]["lat"]]]'
+      input_args:
+        - $geometry
+      output_key: bbox
+
+  - method: lambda
+    inputs:
+      function: 'lambda start_datetime, end_datetime: [[start_datetime, end_datetime]]'
+      input_args:
+        - $start_datetime
+        - $end_datetime
+      output_key: interval
+
+  - method: remove
+    inputs:
+      keys:
+        - uri
+        - geometry
+        - start_datetime
+        - end_datetime

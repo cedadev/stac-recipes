@@ -1,0 +1,69 @@
+type: collection
+
+# This will be run over the meta files, example: neodc/sentinel_ard/data/sentinel_2/2018/07/05/S2A_20180705_lat57lon375_T30VVJ_ORB123_utm30n_osgb_vmsk_sharp_rad_srefdem_stdsref_meta.xml
+
+id:
+  # Use default ID
+  - method: default
+    inputs:
+      defaults:
+        collection_id: sentinel2_ard
+
+extraction_methods:
+  # Extract information from the path
+  - method: default
+    inputs:
+      defaults:
+        license: sentinel
+        description: sentinel 2 ARD
+
+  - method: elasticsearch_aggregation
+    inputs:
+      id_term: collection
+      index: items_sentinel2_ard
+      geo_bounds:
+        - key: geometry
+      min:
+        - key: properties.start_datetime
+          name: start_datetime
+      max:
+        - key: properties.end_datetime
+          name: end_datetime
+      list:
+        - key: properties.Instrument Family Name
+          name: Instrument Family Name
+        - key: properties.Instrument Family Name Abbreviation
+          name: Instrument Family Name Abbreviation
+        - key: properties.Platform Number
+          name: Platform Number
+        - key: properties.NSSDC Identifier
+          name: NSSDC Identifier
+        - key: properties.Start Relative Orbit Number
+          name: Start Relative Orbit Number
+        - key: properties.Start Orbit Number
+          name: Start Orbit Number
+        - key: properties.Ground Tracking Direction
+          name: Ground Tracking Direction
+
+  - method: lambda
+    inputs:
+      function: 'lambda geometry: [[geometry["top_left"]["lon"], geometry["bottom_right"]["lat"], geometry["bottom_right"]["lon"], geometry["top_left"]["lat"]]]'
+      input_args:
+        - $geometry
+      output_key: bbox
+
+  - method: lambda
+    inputs:
+      function: 'lambda start_datetime, end_datetime: [[start_datetime, end_datetime]]'
+      input_args:
+        - $start_datetime
+        - $end_datetime
+      output_key: interval
+
+  - method: remove
+    inputs:
+      keys:
+        - uri
+        - geometry
+        - start_datetime
+        - end_datetime

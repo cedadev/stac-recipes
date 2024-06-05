@@ -1,0 +1,287 @@
+paths:
+  - /badc/cordex/data
+
+type: item
+
+# This will be run over the directorties, example: /badc/cordex/data/cordex/output/EUR-11/MOHC/CNRM-CERFACS-CNRM-CM5/historical/r1i1p1/MOHC-HadREM3-GA7-05/v2/3hr/clt/v20201111
+
+id:
+  # Use directory name ID
+  - method: default
+    inputs:
+      defaults:
+        item_id: $instance_id
+
+extraction_methods:
+  - method: default
+    inputs:
+      defaults:
+        access: [HTTPServer]
+        index_node: null
+        latest: True
+        pid: null
+        replica: False
+        retracted: False
+
+  - method: string_template
+    inputs:
+      template: '{uri}/.*.nc'
+      output_key: data_regex
+
+  # Collect assets and extract datetimes
+  - method: elasticsearch_assets
+    inputs:
+      search_field: path
+      regex_term: data_regex
+      fields:
+        - name: size
+        - name: location
+      extraction_methods:
+        - method: default
+          inputs:
+            defaults:
+              roles: ["data"]
+              checksum: null
+              checksum_type: null
+              type: application/netcdf
+
+        - method: regex
+          inputs:
+            regex: '(?P<start_datetime>\d*)-(?P<end_datetime>\d*)\.nc$'
+            input_term: href
+
+        - method: lambda
+          inputs:
+            function: 'lambda start_datetime: start_datetime + "00000101000000"[len(start_datetime):]'
+            input_args:
+              - $start_datetime
+            output_key: start_datetime
+
+        - method: lambda
+          inputs:
+            function: 'lambda end_datetime: end_datetime + "00001231235959"[len(end_datetime):]'
+            input_args:
+              - $end_datetime
+            output_key: end_datetime
+
+        - method: lambda
+          inputs:
+            function: 'lambda t1, t2: f"{t1[:4]}-{t1[4:6]}-{t1[6:8]}T{t1[8:10]}:{t1[10:12]}:{t1[12:14]}/{t2[:4]}-{t2[4:6]}-{t2[6:8]}T{t2[8:10]}:{t2[10:12]}:{t2[12:14]}" if t1 and t2 else None'
+            input_args:
+              - $start_datetime
+              - $end_datetime
+            output_key: time
+
+        - method: remove
+          inputs:
+            keys:
+              - start_datetime
+              - end_datetime
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: sorted([asset["href"] for asset in assets.values()])[0]'
+      input_args:
+        - $assets
+      output_key: first_filepath
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: sorted([asset["href"] for asset in assets.values()])[-1]'
+      input_args:
+        - $assets
+      output_key: last_filepath
+
+  # Extract information from the path
+  - method: regex
+    inputs:
+      input_term: first_filepath
+      regex: '.*\/(?P<variable_id>\w*)\/v\d{8}\/.*nc$'
+      # regex: '^\/(?:[^/]*/){3}(?P<mip_era>\w*)\/(?P<activity_id>\w*)\/(?P<institution_id>[\w-]*)\/(?:[^/]*/){6}(?P<version>\w*)\/(?P<var_id>[^_]+)_(?P<table_id>[^_]+)_(?P<source_id>[^_]+)_(?P<experiment_id>[^_]+)_r(?P<realization_index>\d*)i(?P<initialisation_index>\d*)p(?P<physics_index>\d*)f(?P<forcing_index>\d*)_(?P<grid_label>[^_.]+)'
+
+  - method: lambda
+    inputs:
+      function: 'lambda uri: uri.replace("/badc/cordex/data", "").strip("/").replace("/", ".")'
+      input_args:
+        - $uri
+      output_key: instance_id
+
+  - method: netcdf
+    inputs:
+      input_term: first_filepath
+      variable_id: $variable_id
+      variable_terms:
+        - name: variable_long_name
+          key: long_name
+        - name: variable_units
+          key: units
+        - name: cf_standard_name
+          key: standard_name
+      global_terms:
+        - name: driving_experiment_name
+        - name: rcm_version
+          key: rcm_version_id
+        - name: experiment_familys
+        - name: product
+        - name: domain
+          key: CORDEX_domain
+        - name: driving_model
+          key: driving_model_id
+        - name: time_frequency
+          key: frequency
+        - name: experiment
+          key: experiment_id
+        - name: project
+          key: project_id
+        - name: institute
+          key: institute_id
+        - name: ensemble
+          key: driving_model_ensemble_member
+        - name: rcm_name
+          key: model_id
+      cf_terms:
+        - name: start_datetime
+          key: time
+        - name: latitude
+        - name: longitude
+  #       - name: levels
+  #         key: Z
+
+  # - method: lambda
+  #   inputs:
+  #     function: 'lambda levels: None if levels is None else [float(levels.values[0]), float(levels.values[-1])] if levels.values.ndim == 1 else [float(levels.values), float(levels.values)]'
+  #     input_args:
+  #       - $levels
+  #     output_key: levels
+
+  - method: lambda
+    inputs:
+      function: 'lambda time: None if time is None else str(time.values[0].isoformat()) if hasattr(time.values[0], "isoformat") else str(time.values[0]).split(".")[0]'
+      input_args:
+        - $start_datetime
+      output_key: start_datetime
+
+  - method: lambda
+    inputs:
+      function: 'lambda latitude: float(latitude.min()) if hasattr(latitude, "min") else latitude'
+      input_args:
+        - $latitude
+      output_key: south
+
+  - method: lambda
+    inputs:
+      function: 'lambda latitude: float(latitude.max()) if hasattr(latitude, "max") else latitude'
+      input_args:
+        - $latitude
+      output_key: north
+
+  - method: lambda
+    inputs:
+      function: 'lambda longitude: float(longitude.min()) if hasattr(longitude, "min") else longitude'
+      input_args:
+        - $longitude
+      output_key: west
+
+  - method: lambda
+    inputs:
+      function: 'lambda longitude: float(longitude.max()) if hasattr(longitude, "max") else longitude'
+      input_args:
+        - $longitude
+      output_key: east
+
+  - method: geometry_polygon
+    inputs:
+      coordinate_keys:
+        -
+          - west
+          - south
+        -
+          - east
+          - south
+        -
+          - east
+          - north
+        -
+          - west
+          - north
+        -
+          - west
+          - south
+
+  - method: geometry_to_bbox
+    inputs:
+      type: polygon
+
+  - method: netcdf
+    inputs:
+      input_term: last_filepath
+      cf_terms:
+        - name: end_datetime
+          key: time
+
+  - method: lambda
+    inputs:
+      function: 'lambda time: None if time is None else str(time.values[-1].isoformat()) if hasattr(time.values[-1], "isoformat") else str(time.values[-1]).split(".")[0]'
+      input_args:
+        - $end_datetime
+      output_key: end_datetime
+
+  - method: iso_date
+    inputs:
+      date_keys:
+        - start_datetime
+        - end_datetime
+      formats:
+        - '%Y-%m-%d %H:%M:%S'
+
+  # Add BBox to each asset
+  - method: lambda
+    inputs:
+      function: 'lambda assets, bbox: {asset_key: asset_value | {"area": bbox, "href": "https://dap.ceda.ac.uk" + asset_value["href"]} for asset_key, asset_value in sorted(assets.items())}'
+      input_args:
+        - $assets
+        - $bbox
+      output_key: assets
+
+  - method: string_template
+    inputs:
+      template: 'https://dap.ceda.ac.uk/badc/cordex/metadata/kerchunk/by_dset/cordex/{product}/{domain}/{institute}/{driving_model}/{instance_id}.zstd'
+      output_key: kerchunk_href
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets, kerchunk_href: {"reference_file": {"checksum": None,"checksum_type": None,"href": kerchunk_href,"roles": ["reference", "data"],"size": None,"type": "application/zstd","open_zarr_kwargs": {"decode_times": True}}} | assets'
+      input_args:
+        - $assets
+        - $kerchunk_href
+      output_key: assets
+
+  - method: datetime_bound_to_centroid
+    inputs:
+      start_term:
+        name: start_datetime
+        format: '%Y-%m-%dT%H:%M:%S'
+      end_term:
+        name: end_datetime
+        format: '%Y-%m-%dT%H:%M:%S'
+
+  # Clean up unneeded terms
+  - method: remove
+    inputs:
+      keys:
+        - first_filepath
+        - latitude
+        - longitude
+        - data_regex
+        - first_filepath
+        - last_filepath
+        - west
+        - south
+        - east
+        - north
+        - kerchunk_href
+        - uri
+
+
+member_of:
+  - recipes/collection/cordex.yaml

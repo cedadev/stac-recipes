@@ -1,14 +1,16 @@
 paths:
   - /badc/faam/data
 
-asset:
-  id: undefined
-  extraction_methods: []
+type: item
 
-item:
-  id: undefined
-  extraction_methods: []
+id:
+  - method: default
+    inputs:
+      defaults:
+        item_id: item_id
 
-collection:
-  id: undefined
-  extraction_methods: []
+extraction_methods:
+  - method: default
+    inputs:
+      defaults:
+        latest: True

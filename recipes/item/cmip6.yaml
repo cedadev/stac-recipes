@@ -1,0 +1,283 @@
+paths:
+  - /new/badc/cmip6/data
+
+type: item
+
+# This will be run over the directorties, example: /badc/cmip6/data/CMIP6/CMIP/MOHC/HadGEM3-GC31-MM/historical/r1i1p1f3/6hrPlev/tas/gn/v20200923
+
+id:
+  # Use directory name ID
+  - method: default
+    inputs:
+      defaults:
+        item_id: $instance_id
+
+extraction_methods:
+  - method: default
+    inputs:
+      defaults:
+        access: [HTTPServer]
+        index_node: null
+        latest: True
+        pid: null
+        replica: False
+        retracted: False
+
+  - method: string_template
+    inputs:
+      template: '{uri}/.*.nc'
+      output_key: data_regex
+
+  # Collect assets and extract datetimes
+  - method: elasticsearch_assets
+    inputs:
+      search_field: path
+      regex_term: data_regex
+      fields:
+        - name: size
+        - name: location
+      extraction_methods:
+        - method: default
+          inputs:
+            defaults:
+              roles: ["data"]
+              checksum: null
+              checksum_type: null
+              type: application/netcdf
+
+        - method: netcdf
+          inputs:
+            input_term: href
+            cf_terms:
+              - name: time
+                key: time
+
+        - method: lambda
+          inputs:
+            function: 'lambda time: None if time is None else time.values[0]'
+            input_args:
+              - $time
+            output_key: start_datetime
+
+        - method: lambda
+          inputs:
+            function: 'lambda time: None if time is None else time.values[-1]'
+            input_args:
+              - $time
+            output_key: end_datetime
+
+        - method: lambda
+          inputs:
+            function: 'lambda time: None if time is None else time.values[-1] - time.values[-2]'
+            input_args:
+              - $time
+            output_key: time_delta
+
+        - method: remove
+          inputs:
+            keys:
+              - time
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: {f"data{str(en+1).zfill(4)}": assets[key] for en, key in enumerate(sorted(assets))}'
+      input_args:
+        - $assets
+      output_key: assets
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: list(assets.values())[0]["href"]'
+      input_args:
+        - $assets
+      output_key: first_filepath
+
+  # Extract information from the path
+  - method: regex
+    inputs:
+      regex: '\/(?P<var_id>\w[^/]*)\/\w*\/\w*[\/]?$'
+
+  - method: lambda
+    inputs:
+      function: 'lambda uri: uri.replace("/badc/cmip6/data", "").strip("/").replace("/", ".")'
+      input_args:
+        - $uri
+      output_key: instance_id
+
+  - method: string_template
+    inputs:
+      template: 'http://cera-www.dkrz.de/WDCC/meta/CMIP6/{instance_id}.json'
+      output_key: citation_url
+
+  - method: netcdf
+    inputs:
+      input_term: first_filepath
+      variable_id: $var_id
+      variable_terms:
+        - name: variable_long_name
+          key: long_name
+        - name: variable_units
+          key: units
+        - name: cf_standard_name
+          key: standard_name
+      global_terms:
+        - name: activity_id
+        - name: data_specs_version
+        - name: experiment_title
+          key: experiment
+        - name: frequency
+        - name: further_info_url
+        - name: grid
+        - name: grid_label
+        - name: institution_id
+        - name: mip_era
+        - name: source_id
+        - name: source_type
+        - name: experiment_id
+        - name: sub_experiment_id
+        - name: nominal_resolution
+        - name: table_id
+        - name: variable_id
+        - name: variant_label
+      cf_terms:
+        - name: latitude
+        - name: longitude
+        - name: levels
+          key: Z
+
+  - method: lambda
+    inputs:
+      function: 'lambda levels: None if levels is None else [float(levels.values[0]), float(levels.values[-1])] if levels.values.ndim == 1 else [float(levels.values), float(levels.values)]'
+      input_args:
+        - $levels
+      output_key: levels
+
+  - method: lambda
+    inputs:
+      function: 'lambda latitude: float(latitude.min()) if hasattr(latitude, "min") else latitude'
+      input_args:
+        - $latitude
+      output_key: south
+
+  - method: lambda
+    inputs:
+      function: 'lambda latitude: float(latitude.max()) if hasattr(latitude, "max") else latitude'
+      input_args:
+        - $latitude
+      output_key: north
+
+  - method: lambda
+    inputs:
+      function: 'lambda longitude: float(longitude.min()) - 180 if hasattr(longitude, "min") else longitude'
+      input_args:
+        - $longitude
+      output_key: west
+
+  - method: lambda
+    inputs:
+      function: 'lambda longitude: float(longitude.max()) - 180 if hasattr(longitude, "max") else longitude'
+      input_args:
+        - $longitude
+      output_key: east
+
+  - method: geometry_polygon
+    inputs:
+      coordinate_keys:
+        -
+          - west
+          - south
+        -
+          - east
+          - south
+        -
+          - east
+          - north
+        -
+          - west
+          - north
+        -
+          - west
+          - south
+
+  - method: geometry_to_bbox
+    inputs:
+      type: polygon
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: list(assets.values())[0]["start_datetime"].isoformat(sep="T", timespec="seconds")'
+      input_args:
+        - $assets
+      output_key: start_datetime
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets: list(assets.values())[-1]["end_datetime"].isoformat(sep="T", timespec="seconds")'
+      input_args:
+        - $assets
+      output_key: end_datetime
+
+  # CHECK DATA IS COMPLETE
+  # - method: lambda
+  #   inputs:
+  #     function: 'lambda assets: i["end_datetime"] - j["start_datetime"] == i["time_delta"] for i, j in zip(assets, assets[1:])'
+
+  # Add BBox to each asset
+  - method: lambda
+    inputs:
+      function: 'lambda assets, bbox: {asset_key: asset_value | {"area": bbox, "start_datetime": None, "end_datetime": None, "time_delta": None, "href": "https://dap.ceda.ac.uk" + asset_value["href"]} for asset_key, asset_value in assets.items()}'
+      input_args:
+        - $assets
+        - $bbox
+      output_key: assets
+
+  - method: lambda
+    inputs:
+      function: 'lambda activity_id, institution_id, source_id, instance_id: f"""https://dap.ceda.ac.uk/badc/cmip6/metadata/kerchunk/pipeline1/{activity_id}/{institution_id}/{source_id}/kr1.0/{instance_id.replace(".","_")}_kr1.0.json"""'
+      input_args:
+        - $activity_id
+        - $institution_id
+        - $source_id
+        - $instance_id
+      output_key: kerchunk_href
+
+  - method: lambda
+    inputs:
+      function: 'lambda assets, kerchunk_href: {"reference_file": {"checksum": None,"checksum_type": None,"href": kerchunk_href,"roles": ["reference", "data"],"size": None,"type": "application/zstd","open_zarr_kwargs": {"decode_times": True}}} | assets'
+      input_args:
+        - $assets
+        - $kerchunk_href
+      output_key: assets
+
+  - method: datetime_bound_to_centroid
+    inputs:
+      start_term:
+        name: start_datetime
+        format: '%Y-%m-%dT%H:%M:%S'
+      end_term:
+        name: end_datetime
+        format: '%Y-%m-%dT%H:%M:%S'
+
+  # Clean up unneeded terms
+  - method: remove
+    inputs:
+      keys:
+        - var_id
+        - latitude
+        - longitude
+        - data_regex
+        - first_filepath
+        - last_filepath
+        - west
+        - south
+        - east
+        - north
+        - uri
+        - kerchunk_href
+        - assets.*.start_datetime
+        - assets.*.end_datetime
+        - assets.*.time_delta
+
+
+member_of:
+  - recipes/collection/cmip6.yaml

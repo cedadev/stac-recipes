@@ -1,0 +1,87 @@
+type: collection
+
+# This will be run over the directorties, example: /badc/cordex/data/cordex/output/EUR-11/MOHC/CNRM-CERFACS-CNRM-CM5/historical/r1i1p1/MOHC-HadREM3-GA7-05/v2/3hr/clt/v20201111
+
+id:
+  # Use default ID
+  - method: default
+    inputs:
+      defaults:
+        collection_id: cordex
+
+extraction_methods:
+  # Extract information from the path
+  - method: default
+    inputs:
+      defaults:
+        license: cc-by-4.0
+        description: CORDEX
+
+  - method: elasticsearch_aggregation
+    inputs:
+      id_term: collection
+      index: items_cordex
+      geo_bounds:
+        - key: geometry
+      min:
+        - key: properties.start_datetime
+          name: start_datetime
+      max:
+        - key: properties.end_datetime
+          name: end_datetime
+      list:
+        - key: properties.var_id
+          name: var_id
+        - key: properties.variable_long_name
+          name: variable_long_name
+        - key: properties.variable_units
+          name: variable_units
+        - key: properties.cf_standard_name
+          name: cf_standard_name
+        - key: properties.driving_experiment_name
+          name: driving_experiment_name
+        - key: properties.rcm_version_id
+          name: rcm_version_id
+        - key: properties.experiment_familys
+          name: experiment_familys
+        - key: properties.product
+          name: product
+        - key: properties.domain
+          name: domain
+        - key: properties.driving_model
+          name: driving_model
+        - key: properties.time_frequency
+          name: time_frequency
+        - key: properties.experiment
+          name: experiment
+        - key: properties.project
+          name: project
+        - key: properties.institute
+          name: institute
+        - key: properties.ensemble
+          name: ensemble
+        - key: properties.rcm_name
+          name: rcm_name
+
+  - method: lambda
+    inputs:
+      function: 'lambda geometry: [[geometry["top_left"]["lon"], geometry["bottom_right"]["lat"], geometry["bottom_right"]["lon"], geometry["top_left"]["lat"]]]'
+      input_args:
+        - $geometry
+      output_key: bbox
+
+  - method: lambda
+    inputs:
+      function: 'lambda start_datetime, end_datetime: [[start_datetime, end_datetime]]'
+      input_args:
+        - $start_datetime
+        - $end_datetime
+      output_key: interval
+
+  - method: remove
+    inputs:
+      keys:
+        - uri
+        - geometry
+        - start_datetime
+        - end_datetime
