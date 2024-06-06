@@ -60,7 +60,7 @@ extraction_methods:
 
   - method: lambda
     inputs:
-      function: 'lambda uri: uri.replace("/Users/sturoscy/Projects/architecture/stac-esgf2-us-generator", "").strip("/").replace("/", ".")'
+      function: 'lambda uri: uri.replace("/badc/cmip6/data", "").strip("/").replace("/", ".")'
       input_args:
         - $uri
       output_key: instance_id
