@@ -25,59 +25,20 @@ extraction_methods:
 
   - method: string_template
     inputs:
-      template: '{uri}/.*.nc'
+      template: '{uri}/*'
       output_key: data_regex
 
   # Collect assets and extract datetimes
-  - method: elasticsearch_assets
+  - method: regex_assets
     inputs:
-      search_field: path
-      regex_term: data_regex
-      fields:
-        - name: size
-        - name: location
+      glob: data_regex
       extraction_methods:
         - method: default
           inputs:
             defaults:
               roles: ["data"]
-              checksum: null
-              checksum_type: null
-              type: application/netcdf
 
-        - method: netcdf
-          inputs:
-            input_term: href
-            cf_terms:
-              - name: time
-                key: time
-
-        - method: lambda
-          inputs:
-            function: 'lambda time: None if time is None else time.values[0]'
-            input_args:
-              - $time
-            output_key: start_datetime
-
-        - method: lambda
-          inputs:
-            function: 'lambda time: None if time is None else time.values[-1]'
-            input_args:
-              - $time
-            output_key: end_datetime
-
-        - method: lambda
-          inputs:
-            function: 'lambda time: None if time is None else time.values[-1] - time.values[-2]'
-            input_args:
-              - $time
-            output_key: time_delta
-
-        - method: remove
-          inputs:
-            keys:
-              - time
-
+  # Update asset keys to non-verbose names
   - method: lambda
     inputs:
       function: 'lambda assets: {f"data{str(en+1).zfill(4)}": assets[key] for en, key in enumerate(sorted(assets))}'
@@ -99,7 +60,7 @@ extraction_methods:
 
   - method: lambda
     inputs:
-      function: 'lambda uri: uri.replace("/badc/cmip6/data", "").strip("/").replace("/", ".")'
+      function: 'lambda uri: uri.replace("/Users/sturoscy/Projects/architecture/stac-esgf2-us-generator", "").strip("/").replace("/", ".")'
       input_args:
         - $uri
       output_key: instance_id
@@ -223,31 +184,32 @@ extraction_methods:
   #     function: 'lambda assets: i["end_datetime"] - j["start_datetime"] == i["time_delta"] for i, j in zip(assets, assets[1:])'
 
   # Add BBox to each asset
-  - method: lambda
-    inputs:
-      function: 'lambda assets, bbox: {asset_key: asset_value | {"area": bbox, "start_datetime": None, "end_datetime": None, "time_delta": None, "href": "https://dap.ceda.ac.uk" + asset_value["href"]} for asset_key, asset_value in assets.items()}'
-      input_args:
-        - $assets
-        - $bbox
-      output_key: assets
+  # - method: lambda
+  #   inputs:
+  #     function: 'lambda assets, bbox: {asset_key: asset_value | {"area": bbox, "start_datetime": None, "end_datetime": None, "time_delta": None, "href": "https://dap.ceda.ac.uk" + asset_value["href"]} for asset_key, asset_value in assets.items()}'
+  #     input_args:
+  #       - $assets
+  #       - $bbox
+  #     output_key: assets
 
-  - method: lambda
-    inputs:
-      function: 'lambda activity_id, institution_id, source_id, instance_id: f"""https://dap.ceda.ac.uk/badc/cmip6/metadata/kerchunk/pipeline1/{activity_id}/{institution_id}/{source_id}/kr1.0/{instance_id.replace(".","_")}_kr1.0.json"""'
-      input_args:
-        - $activity_id
-        - $institution_id
-        - $source_id
-        - $instance_id
-      output_key: kerchunk_href
+  # Add kerchunk reference file asset
+  # - method: lambda
+  #   inputs:
+  #     function: 'lambda activity_id, institution_id, source_id, instance_id: f"""https://dap.ceda.ac.uk/badc/cmip6/metadata/kerchunk/pipeline1/{activity_id}/{institution_id}/{source_id}/kr1.0/{instance_id.replace(".","_")}_kr1.0.json"""'
+  #     input_args:
+  #       - $activity_id
+  #       - $institution_id
+  #       - $source_id
+  #       - $instance_id
+  #     output_key: kerchunk_href
 
-  - method: lambda
-    inputs:
-      function: 'lambda assets, kerchunk_href: {"reference_file": {"checksum": None,"checksum_type": None,"href": kerchunk_href,"roles": ["reference", "data"],"size": None,"type": "application/zstd","open_zarr_kwargs": {"decode_times": True}}} | assets'
-      input_args:
-        - $assets
-        - $kerchunk_href
-      output_key: assets
+  # - method: lambda
+  #   inputs:
+  #     function: 'lambda assets, kerchunk_href: {"reference_file": {"checksum": None,"checksum_type": None,"href": kerchunk_href,"roles": ["reference", "data"],"size": None,"type": "application/zstd","open_zarr_kwargs": {"decode_times": True}}} | assets'
+  #     input_args:
+  #       - $assets
+  #       - $kerchunk_href
+  #     output_key: assets
 
   - method: datetime_bound_to_centroid
     inputs:
@@ -273,10 +235,7 @@ extraction_methods:
         - east
         - north
         - uri
-        - kerchunk_href
-        - assets.*.start_datetime
-        - assets.*.end_datetime
-        - assets.*.time_delta
+        # - kerchunk_href
 
 
 member_of:
