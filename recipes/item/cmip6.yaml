@@ -1,5 +1,5 @@
 paths:
-  - /new/badc/cmip6/data
+  - /badc/cmip6/data
 
 type: item
 
@@ -31,7 +31,7 @@ extraction_methods:
   # Collect assets and extract datetimes
   - method: regex_assets
     inputs:
-      glob: data_regex
+      glob_term: data_regex
       extraction_methods:
         - method: default
           inputs:
@@ -101,6 +101,7 @@ extraction_methods:
         - name: variable_id
         - name: variant_label
       cf_terms:
+        - name: time
         - name: latitude
         - name: longitude
         - name: levels
@@ -166,16 +167,29 @@ extraction_methods:
 
   - method: lambda
     inputs:
-      function: 'lambda assets: list(assets.values())[0]["start_datetime"].isoformat(sep="T", timespec="seconds")'
+      function: 'lambda time: None if time is None else str(time.values[0].isoformat(sep="T", timespec="seconds")) + "Z" if hasattr(time.values[0], "isoformat") else str(time.values[0]).split(".")[0] + "Z"'
       input_args:
-        - $assets
+        - $time
       output_key: start_datetime
 
   - method: lambda
     inputs:
-      function: 'lambda assets: list(assets.values())[-1]["end_datetime"].isoformat(sep="T", timespec="seconds")'
+      function: 'lambda assets: list(assets.values())[-1]["href"]'
       input_args:
         - $assets
+      output_key: last_filepath
+
+  - method: netcdf
+    inputs:
+      input_term: last_filepath
+      cf_terms:
+        - name: time
+
+  - method: lambda
+    inputs:
+      function: 'lambda time: None if time is None else str(time.values[-1].isoformat(sep="T", timespec="seconds")) + "Z" if hasattr(time.values[-1], "isoformat") else str(time.values[-1]).split(".")[0] + "Z"'
+      input_args:
+        - $time
       output_key: end_datetime
 
   # CHECK DATA IS COMPLETE
@@ -235,6 +249,7 @@ extraction_methods:
         - east
         - north
         - uri
+        - time
         # - kerchunk_href
 
 
